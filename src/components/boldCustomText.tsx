@@ -2,19 +2,21 @@ import { Text as DefaultText, } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
-export default function BoldCustomText(props: DefaultText['props']) {
-  const { style, ...otherProps } = props;
+export default function BoldCustomText(props) {
+  const { className, text, type } = props;
   const [fontsLoaded] = useFonts({
-    Montserrat: require('../../assets/fonts/Montserrat-Bold.ttf'),
+    Montserrat: require("../../assets/fonts/Montserrat-Thin.ttf"),
   });
+  console.log(className);
+
   if (!fontsLoaded) {
     return <AppLoading />; // Or any loading indicator
   }
-  return <DefaultText style={[{
-    fontFamily: 'Montserrat',
-  }, style]}
+  return <DefaultText
+    className={className}
+    style={[{
+      fontFamily: 'Montserrat',
+    }]}
     maxFontSizeMultiplier={1.1}
-    {...otherProps}
-
-  />;
+  >{text}</DefaultText>;
 }
