@@ -18,7 +18,7 @@ export default function SignIn() {
       <TouchableWithoutFeedback onPress={closeKeyboard}>
         <SafeAreaView >
           <View className=" ml-6 mt-0">
-            <TextInput className=" border-[#5b5a5f] p-5 mr-6 border-b-1 rounded-md focus:border-[#7e7e7e] color-slate-400" style={{ borderBottomWidth: 1 }} placeholder="First Name" placeholderTextColor="#444444" value={nameFirst} onChangeText={setNameFirst}></TextInput>
+            <TextInput className=" border-[#5b5a5f] p-5 mr-6 border-b-1 rounded-md focus:border-[#7e7e7e] color-slate-400" style={{ borderBottomWidth: 1 }} placeholder="First Name" placeholderTextColor="#444444" value={nameFirst} onChangeText={setNameFirst}></TextInput>sign
             <TextInput className=" border-[#5b5a5f] p-5 mr-6 border-b-1 rounded-md focus:border-[#7e7e7e] color-slate-400" style={{ borderBottomWidth: 1 }} placeholder="First Name" placeholderTextColor="#444444" value={nameLast} onChangeText={setNameLast}></TextInput>
             <TextInput className=" border-[#5b5a5f] p-5 mr-6 border-b-1 rounded-md focus:border-[#7e7e7e] color-slate-400" style={{ borderBottomWidth: 1 }} placeholder="First Name" placeholderTextColor="#444444" value={nameFirst} onChangeText={setNameFirst}></TextInput>
             <View className=" mt-48 w-full h-14">
