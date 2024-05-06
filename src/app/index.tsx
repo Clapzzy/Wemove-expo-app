@@ -24,8 +24,8 @@ export default function Page() {
           <View className="w-full items-center ">
             <Image className="mt-[130]" source={require("assets/logo.png")} />
             <View className="mt-[320]">
-              <PrimaryButtonRegister style={{ shadowColor: "#000", shadowOffset: { width: 4, height: 4 }, shadowRaduis: 5, shadowOpacity: 0.39 }} text="Sign up with phone" backgroundColorButton="#737373" textColor="#A3A3A3" />
-              <PrimaryButtonRegister style={{ shadowColor: "#000", shadowOffset: { width: 4, height: 4 }, shadowRaduis: 5, shadowOpacity: 0.39 }} className='mt-[12]' text="Sign up with email" backgroundColorButton="#D9F99D" textColor="#1A2E05" />
+              <PrimaryButtonRegister onPress={press} style={{ shadowColor: "#000", shadowOffset: { width: 4, height: 4 }, shadowRaduis: 5, shadowOpacity: 0.39 }} text="Sign up with phone" backgroundColorButton="#737373" textColor="#A3A3A3" />
+              <PrimaryButtonRegister onPress={press} style={{ shadowColor: "#000", shadowOffset: { width: 4, height: 4 }, shadowRaduis: 5, shadowOpacity: 0.39 }} className='mt-[12]' text="Sign up with email" backgroundColorButton="#D9F99D" textColor="#1A2E05" />
               <View className="flex-row mt-[16]">
                 <CustomText className="text-16 text-[#A3A3A3]" text="Already have an account?" type="SemiBold"></CustomText>
                 <CustomText className="text-16 text-[#A3E635]" text=" Log in" type="SemiBold"></CustomText>
