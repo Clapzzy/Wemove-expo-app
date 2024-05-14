@@ -2,10 +2,22 @@
   "expo": {
     "scheme": "acme",
     "userInterfaceStyle": "automatic",
+    "icon": "assets/splash/icon.png",
+    "splash": {
+      "image": "assets/splash/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#141414"
+    },
     "orientation": "default",
     "web": {
       "output": "static",
       "bundler": "metro"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "assets/splash/adaptive-icon.png",
+        "backgroundColor": "#141414"
+      }
     },
     "plugins": [
       [

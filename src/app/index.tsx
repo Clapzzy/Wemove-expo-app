@@ -1,10 +1,10 @@
 import { Link, router } from "expo-router";
+import CustomText from "@/components/customText";
 import { useEffect, useState } from "react";
 import { Text, View, Pressable, TextInput, Image, ImageBackground, Dimensions } from "react-native";
 import WavesBackground from "@/components/SvgWaves";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PrimaryButtonRegister from "@/components/buttonPrimary";
-import CustomText from "@/components/CustomText"
 
 export default function Page() {
   const [email, setEmail] = useState('')
@@ -12,6 +12,9 @@ export default function Page() {
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
     console.log(windowWidth, windowHeight)
+    setTimeout(() => {
+      router.push("/(main)/challenges")
+    }, 1000)
   })
   function press() {
     router.push('/profile-maker/signIn')
@@ -46,4 +49,3 @@ export default function Page() {
     </View >
   );
 }
-//secret message
