@@ -1,6 +1,7 @@
 import "../global.css";
 import { Slot, Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import 'react-native-reanimated'
 
 const client = new QueryClient()
 
