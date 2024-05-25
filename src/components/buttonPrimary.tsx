@@ -14,7 +14,7 @@ export default function PrimaryButtonRegister(props: any) {
       className={className}
     >
       <View className=' justify-center items-center rounded-full mr-6 h-[55] w-[260]' style={[{ backgroundColor: backgroundColorButton }, style]}>
-        <CustomText style={{ color: textColor, fontSize: 18 }} type="Bold" text={text} ></CustomText>
+        <CustomText style={{ color: textColor, fontSize: 20 }} type="Bold" text={text} ></CustomText>
       </View>
     </Pressable>
   )
