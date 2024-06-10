@@ -35,7 +35,7 @@ export default function App() {
   async function onSave(photo) {
     contextData.editInfo({ "currentPicUrl": photo.uri })
     await AsyncStorage.setItem("tempPic", photo.base64)
-    router.push("/(main)/hello")
+    router.push("/(main)/home")
   }
 
   return (
