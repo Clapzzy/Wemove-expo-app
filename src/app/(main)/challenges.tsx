@@ -1,15 +1,17 @@
 import { Text, View, ScrollView, Image, ImageBackground, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { CameraView, useCameraPermissions } from 'expo-camera'
+import { router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchChallenges, fetchWeeklyChallenges } from "../../helper/challanges"
-import { SplashScreen } from "expo-router";
 import CustomText from "../../components/customText"
 import NormalButton from "../../components/normalButton"
-import CustomItalicText from "../../components/customItalicText"
 
 export default function Challenges() {
+
+  const [camera, setCamera] = useState(false)
+  const [permission, requestPermision] = useCameraPermissions()
 
   const queryChallenges = useQuery({
     queryKey: ['challenges'],
@@ -19,6 +21,10 @@ export default function Challenges() {
     queryKey: ['weeklyChallenges'],
     queryFn: () => fetchWeeklyChallenges()
   })
+
+  const completeChallenge = async (i) => {
+    router.push("/(main)/camera")
+  }
 
 
   if (queryChallenges.isLoading || queryChallengesWeekly.isLoading) {
@@ -45,14 +51,11 @@ export default function Challenges() {
 
     )
   }
-
-
-
   return (
     <View className="items-center bg-[#262626] flex-1 color-white">
       <ImageBackground className="w-full h-full" source={require('assets/waves2.png')}>
-        <SafeAreaView>
-          <ScrollView>
+        <ScrollView>
+          <SafeAreaView>
             <View className="w-fit justify-between flex-row mx-4">
               <Image source={require("../../../assets/pfp.png")} />
               <Image className="mt-2" source={require("../../../assets/inbox.png")} />
@@ -67,7 +70,7 @@ export default function Challenges() {
                   <CustomText text={title} type="Medium" className="text-16 text-[#E5E5E5] pb-2" />
                   <View className="mt-5 mb-[8] w-full content-between flex-row place-content-between justify-between">
                     <NormalButton text="Смени" textColor="#737373" style={{ borderColor: "#2c2c2c", borderWidth: 1.5 }} />
-                    <NormalButton text="Виж повече" textColor="#1A2E05" backgroundColorButton="#D9F99D" style={{ borderColor: "#D9F99D", borderWidth: 1.5 }} />
+                    <NormalButton onPress={completeChallenge} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#D9F99D" style={{ borderColor: "#D9F99D", borderWidth: 1.5 }} />
                   </View>
                 </View>
               )
@@ -87,9 +90,22 @@ export default function Challenges() {
                 </View>
               )
             })}
-          </ScrollView>
-        </SafeAreaView>
+          </SafeAreaView>
+        </ScrollView>
       </ImageBackground >
     </View >
   );
+
+
 }
+/*
+  <View>
+   {camera ?  (
+   <View className=" flex-1 justify-center">
+    <CameraView className="flex-1">
+    </CameraView>
+   </View>
+   ): <Text>No</Text>}
+  </View>
+ 
+*/

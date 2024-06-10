@@ -24,7 +24,7 @@ export default function Search() {
             <View className="px-4"  >
               <CustomText text="Search" type="ExtraBold" className="text-[#BFE500] text-32" />
               <TextInput className="bg-[#080807] opacity-70 text-20 text-[#A3A3A3] h-10 w-fit mt-2 rounded-lg  pl-3" onChangeText={setSearch}
-                placeholder="Search" // Clear placeholder text when typing
+                placeholder="Search"
                 placeholderTextColor="#A3A3A3"
                 value={search}
               >

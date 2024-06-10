@@ -11,6 +11,7 @@ export default function Layout() {
     <QueryClientProvider client={client}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(main)" options={{ headerShown: false }} />
+        <Stack.Screen name="(profile-maker)" options={{ headerShown: false }} />
       </Stack>
     </QueryClientProvider>
   );

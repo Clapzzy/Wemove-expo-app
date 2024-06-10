@@ -1,13 +1,15 @@
 import { Link, router } from "expo-router";
 import { View, Keyboard, Text, ImageBackground, TextInput, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import CustomText from "@/components/customText";
 import PrimaryButtonRegister from "@/components/buttonPrimary";
 
-export default function EmailPage() {
-
+import RegisterContext from "@/helper/loginContext";
+export default function SignIn() {
+  const formData = useContext(RegisterContext)
   const textField = useRef(null)
+  const [isBadEmail, setBadEmail] = useState(false)
   const [email, setEmail] = useState('')
 
   useEffect(() => {
@@ -16,9 +18,19 @@ export default function EmailPage() {
   function closeKeyboard() {
     Keyboard.dismiss();
   }
-  function press() {
-    router.push('/profile-maker/signIn2')
+
+  function nextPage() {
+    const emailRegex = /^([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,4}$/;
+    if (emailRegex.test(email)) {
+      formData.editRegisterInfo({ ...formData.data, email: email, })
+      router.push('/profile-maker/signIn2')
+      console.log(formData.data)
+    } else {
+      setBadEmail(true)
+    }
+
   }
+
   function onChangeEmail(input: string) {
     setEmail(input)
   }
@@ -47,8 +59,11 @@ export default function EmailPage() {
                 placeholder="E-mail"
               >
               </TextInput>
-              <CustomText text='Sign up with phone number' className='mt-6 text-16 text-[#C2DC55]' type="Regular" />
-              <PrimaryButtonRegister text="Next ->" backgroundColorButton="#E4FF65" textColor="#1A2E05" className="mt-56" />
+              {isBadEmail
+                ? (<CustomText text='Please enter a valid e-mail' className='mt-6 text-16 text-[#EF4444]' type="Regular" />)
+                : (<CustomText text='Sign up with phone number' className='mt-6 text-16 text-[#C2DC55]' type="Regular" />)
+              }
+              <PrimaryButtonRegister onPress={nextPage} text="Next ->" backgroundColorButton="#E4FF65" textColor="#1A2E05" className="mt-56" />
             </View>
           </TouchableWithoutFeedback>
         </SafeAreaView>

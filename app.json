@@ -26,6 +26,14 @@
           "origin": "https://n"
         }
       ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow WeMove to access your camera",
+          "microphonePermission": "Allow WeMove to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ],
       "expo-font"
     ],
     "name": "WemoveApp",
