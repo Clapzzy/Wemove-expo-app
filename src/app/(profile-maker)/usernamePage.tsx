@@ -23,7 +23,7 @@ export default function UsernamePage() {
     const emailRegex = /^.{3,16}$/
     if (emailRegex.test(username)) {
       formData.editRegisterInfo({ ...formData.data, username: username, })
-      router.push('/profile-maker/displayNamePage')
+      router.push('/(profile-maker)/displayNamePage')
       console.log(formData.data)
     } else {
       setBadUsername(true)

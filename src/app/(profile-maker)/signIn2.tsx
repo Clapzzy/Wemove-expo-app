@@ -23,7 +23,7 @@ export default function SignIn() {
     const emailRegex = /^([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,4}$/;
     if (emailRegex.test(email)) {
       formData.editRegisterInfo({ ...formData.data, email: email, })
-      router.push('/profile-maker/signIn2')
+      router.push('/(profile-maker)/signIn2')
       console.log(formData.data)
     } else {
       setBadEmail(true)

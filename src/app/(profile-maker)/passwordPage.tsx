@@ -23,7 +23,7 @@ export default function SignIn() {
     const emailRegex = /^.{5,16}$/
     if (emailRegex.test(pass)) {
       formData.editRegisterInfo({ ...formData.data, password: pass })
-      router.push('/profile-maker/termsPage')
+      router.push('/(profile-maker)/termsPage')
       console.log(formData.data)
     } else {
       setBadPass(true)

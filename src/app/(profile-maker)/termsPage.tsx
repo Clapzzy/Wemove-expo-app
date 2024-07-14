@@ -14,7 +14,7 @@ export default function TermsPage() {
 
   function nextPage() {
     if (isChecked) {
-      router.push('/profile-maker/termsPage')
+      router.push('/(profile-maker)/termsPage')
     }
 
   }

@@ -13,7 +13,7 @@ export default function StartPage() {
     console.log(windowWidth, windowHeight)
   })
   function press() {
-    router.push('/profile-maker/emailPage')
+    router.push('/(profile-maker)/emailPage')
   }
 
   return (
