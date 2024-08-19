@@ -8,7 +8,11 @@ export default function Page() {
   useEffect(() => {
     console.log("Hello")
     setTimeout(() => {
+<<<<<<< HEAD
       router.push('/(main)/challenges')
+=======
+      router.push('/(profile-maker)/startPage')
+>>>>>>> 62dfb68 (changes)
     }, 1)
   }, [])
 

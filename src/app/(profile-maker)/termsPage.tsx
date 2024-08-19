@@ -14,7 +14,11 @@ export default function TermsPage() {
 
   function nextPage() {
     if (isChecked) {
+<<<<<<< HEAD
       router.push('/(profile-maker)/termsPage')
+=======
+      router.push('(main)/challenges')
+>>>>>>> 62dfb68 (changes)
     }
 
   }

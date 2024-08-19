@@ -80,4 +80,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+<<<<<<< HEAD
 //hello ``
+=======
+>>>>>>> 62dfb68 (changes)
