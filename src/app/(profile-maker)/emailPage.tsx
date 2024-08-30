@@ -1,5 +1,5 @@
 import { Link, router } from "expo-router";
-import { View, Keyboard, Text, ImageBackground, TextInput, TouchableWithoutFeedback } from "react-native";
+import { View, Keyboard, TextInput, Text, ImageBackground, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useContext, useEffect, useRef, useState } from "react";
 import CustomText from "@/components/customText";

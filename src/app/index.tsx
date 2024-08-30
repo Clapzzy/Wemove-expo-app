@@ -8,7 +8,8 @@ export default function Page() {
   useEffect(() => {
     console.log("Hello")
     setTimeout(() => {
-      router.push('/(profile-maker)/startPage')
+      router.push('/(main)/post_preview')
+      //      router.push('/(profile-maker)/startPage')
     }, 1)
   }, [])
 

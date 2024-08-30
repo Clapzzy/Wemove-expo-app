@@ -46,7 +46,7 @@ export default function Home() {
       <View className="items-center bg-[#262626] flex-1 color-white">
         <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
           <SafeAreaView>
-            <CustomText text={queryChallenges.error} type="Bold" className=" text-30 text-gray-500" />
+            <CustomText text={queryChallenges.error.message} type="Bold" className=" text-30 text-gray-500" />
           </SafeAreaView>
         </ImageBackground >
       </View >
@@ -88,6 +88,5 @@ export default function Home() {
       </ImageBackground>
     </View>
   );  
-}      
-    
-        
+}
+              

@@ -78,6 +78,17 @@ export default function TabLayout() {
             href: null,
           }}
         />
+        <Tabs.Screen
+          name="post_preview"
+          options={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              display: 'none'
+            },
+            href: null,
+          }}
+        />
 
       </Tabs >
     </MainProvider>

@@ -2,18 +2,19 @@ import axios from "axios";
 
 export const fetchChallenges = async () => {
   try {
-    const response = await axios.get(`http://3.77.19.140:3000/challenge/random?timeframe=daily&numberOfChallenges=2`);
+    const response = await axios.get(`http://3.77.19.140:3000/challenges/random?timeframe=daily&numberOfChallenges=2`);
     return response.data
   } catch (error) {
-    return error
+    return Promise.reject(error)
+    throw new Error(error)
   }
 };
 export const fetchWeeklyChallenges = async () => {
   try {
-    const response = await axios.get(`http://3.77.19.140:3000/challenge/random?timeframe=weekly&numberOfChallenges=1`);
+    const response = await axios.get(`http://3.77.19.140:3000/challenges/random?timeframe=weekly&numberOfChallenges=1`);
     return response.data
   } catch (error) {
-    return error
+    throw error
   }
 };
 export const fetchPosts = async () => {

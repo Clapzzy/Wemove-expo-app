@@ -17,6 +17,7 @@ export default function Challenges() {
     queryKey: ['challenges'],
     queryFn: () => fetchChallenges()
   })
+
   const queryChallengesWeekly = useQuery({
     queryKey: ['weeklyChallenges'],
     queryFn: () => fetchWeeklyChallenges()
@@ -25,6 +26,9 @@ export default function Challenges() {
   const completeChallenge = async (i) => {
     router.push("/(main)/camera")
   }
+
+
+
 
 
   if (queryChallenges.isLoading || queryChallengesWeekly.isLoading) {
@@ -39,18 +43,24 @@ export default function Challenges() {
 
     )
   }
+
+
+
   if (queryChallenges.isError || queryChallengesWeekly.isError) {
     return (
       <View className="items-center bg-[#262626] flex-1 color-white">
         <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
           <SafeAreaView>
-            <CustomText text={queryChallenges.error} type="Bold" className=" text-30 text-gray-500" />
+            <CustomText text={queryChallenges.error.message} type="Bold" className=" text-30 text-gray-500" />
           </SafeAreaView>
         </ImageBackground >
       </View >
 
     )
   }
+
+
+
   return (
     <View className="items-center bg-[#262626] flex-1 color-white">
       <ImageBackground className="w-full h-full" source={require('assets/waves2.png')}>
