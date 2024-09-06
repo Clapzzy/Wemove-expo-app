@@ -4,7 +4,8 @@ import MainContext from '@/helper/mainScreensContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons/';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { addPost } from '@/helper/addPosts';
 import CustomText from '@/components/customText';
 import { router, useFocusEffect } from 'expo-router';
 
@@ -12,7 +13,7 @@ export default function postPreview() {
   const contextData = useContext(MainContext)
   const [image, setImage] = useState(null)
   const textField = useRef(null)
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState<string>('')
 
   const getImage = async () => {
     const pic = await AsyncStorage.getItem("tempPic")
@@ -20,8 +21,18 @@ export default function postPreview() {
     return pic
   }
 
+  const postMutation = useMutation({
+    mutationFn: addPost,
+    onSuccess(data, variables, context) {
+      router.push("/(main)/home")
+    },
+    onSettled(data, error, variables, context) {
+      console.log(error,)
+    },
+  })
+
   const goBack = () => {
-    router.back()
+    router.push('/(main)/camera')
   }
 
   const onChangeDesc = (input) => {
@@ -33,7 +44,8 @@ export default function postPreview() {
     Keyboard.dismiss()
   }
 
-  const sendPost = () => {
+  const sendPost = async () => {
+    postMutation.mutate({ description, image, userId: '661bf127eef0685e54415c3e' })
     console.log("post")
   }
   //TODO fix this

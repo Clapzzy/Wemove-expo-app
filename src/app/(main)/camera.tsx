@@ -50,6 +50,7 @@ export default function App() {
     contextData.editInfo({ "currentPicUrl": photo.uri })
     await AsyncStorage.removeItem("tempPic")
     await AsyncStorage.setItem("tempPic", photo.base64)
+    console.log(photo.uri)
     router.push("/(main)/post_preview")
   }
   //TODO add grid option
@@ -58,7 +59,7 @@ export default function App() {
       <CameraView ref={cameraRef} style={{ flex: 1 }} facing={facing} flash={flash}>
         <SafeAreaView style={{ flex: 1, padding: 12 }} >
           <View className='flex-[1] justify-start self-end'>
-            <View className='rounded-3xl py-4 px-2 w-12 justify-end bg-[#13131080] flex-col'>
+            <View className='rounded-2xl py-4 px-2 w-12 justify-end bg-[#13131080] flex-col'>
               <Pressable
                 className='mb-3'
                 onPress={toggleCameraFacing}
