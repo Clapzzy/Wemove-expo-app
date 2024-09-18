@@ -13,15 +13,15 @@ export default function CustomItalicText(props) {
   }
 
   const [fontsLoaded] = useFonts({
-    BlackItalic: require("../../assets/fonts-light/Montserrat-BlackItalic.ttf"),
-    ExtraBoldItalic: require("../../assets/fonts-light/Montserrat-ExtraBoldItalic.ttf"),
-    BoldItalic: require("../../assets/fonts-light/Montserrat-BoldItalic.ttf"),
-    SemiBoldItalic: require("../../assets/fonts-light/Montserrat-SemiBoldItalic.ttf"),
-    MediumItalic: require("../../assets/fonts-light/Montserrat-MediumItalic.ttf"),
-    RegularItalic: require("../../assets/fonts-light/Montserrat-Italic.ttf"),
-    ThinItalic: require("../../assets/fonts-light/Montserrat-ThinItalic.ttf"),
-    LightItalic: require("../../assets/fonts-light/Montserrat-LightItalic.ttf"),
-    ExtraLightItalic: require("../../assets/fonts-light/Montserrat-ExtraLightItalic.ttf")
+    Black: require("../../assets/fonts-light/Montserrat-BlackItalic.ttf"),
+    ExtraBold: require("../../assets/fonts-light/Montserrat-ExtraBoldItalic.ttf"),
+    Bold: require("../../assets/fonts-light/Montserrat-BoldItalic.ttf"),
+    SemiBold: require("../../assets/fonts-light/Montserrat-SemiBoldItalic.ttf"),
+    Medium: require("../../assets/fonts-light/Montserrat-MediumItalic.ttf"),
+    Regular: require("../../assets/fonts-light/Montserrat-Italic.ttf"),
+    Thin: require("../../assets/fonts-light/Montserrat-ThinItalic.ttf"),
+    Light: require("../../assets/fonts-light/Montserrat-LightItalic.ttf"),
+    ExtraLight: require("../../assets/fonts-light/Montserrat-ExtraLightItalic.ttf")
   });
   if (!fontsLoaded) {
     return <AppLoading />;

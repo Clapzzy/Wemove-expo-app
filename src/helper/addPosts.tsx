@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import FormData from "form-data";
 
@@ -9,7 +10,11 @@ interface AddPostParams {
 
 export const addPost = async ({ description, image, userId }: AddPostParams) => {
   try {
+    const challengeId = await AsyncStorage.getItem("challengeId")
+    const username = await AsyncStorage.getItem('username')
     const formData = new FormData()
+    formData.append('username', username)
+    formData.append('challengeId', challengeId)
     formData.append('description', description)
     formData.append('image', image)
     formData.append('userId', userId)

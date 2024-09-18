@@ -22,15 +22,6 @@ export default function CustomText(props) {
     Thin: require("../../assets/fonts/Montserrat-Thin.ttf"),
     Light: require("../../assets/fonts/Montserrat-Light.ttf"),
     ExtraLight: require("../../assets/fonts/Montserrat-ExtraLight.ttf"),
-    BlackItalic: require("../../assets/fonts-light/Montserrat-BlackItalic.ttf"),
-    ExtraBoldItalic: require("../../assets/fonts-light/Montserrat-ExtraBoldItalic.ttf"),
-    BoldItalic: require("../../assets/fonts-light/Montserrat-BoldItalic.ttf"),
-    SemiBoldItalic: require("../../assets/fonts-light/Montserrat-SemiBoldItalic.ttf"),
-    MediumItalic: require("../../assets/fonts-light/Montserrat-MediumItalic.ttf"),
-    RegularItalic: require("../../assets/fonts-light/Montserrat-Italic.ttf"),
-    ThinItalic: require("../../assets/fonts-light/Montserrat-ThinItalic.ttf"),
-    LightItalic: require("../../assets/fonts-light/Montserrat-LightItalic.ttf"),
-    ExtraLightItalic: require("../../assets/fonts-light/Montserrat-ExtraLightItalic.ttf")
   });
   if (!fontsLoaded) {
     return <AppLoading />;

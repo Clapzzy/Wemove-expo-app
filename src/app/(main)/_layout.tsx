@@ -1,4 +1,5 @@
 import React from 'react';
+import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import ChallengeIcon from '@/components/icons/challengesIcon';
@@ -19,7 +20,7 @@ export default function TabLayout() {
           tabBarStyle: {
             borderTopWidth: 0,
             height: 90,
-            backgroundColor: "#2c2c2c",
+            backgroundColor: "#0F0F0F",
             position: 'absolute',
             elevation: 0
           },
@@ -32,14 +33,6 @@ export default function TabLayout() {
             tabBarShowLabel: false,
             headerShown: false,
             tabBarIcon: ({ color }) => <HomeIcon color={color} />,
-          }}
-        />
-        <Tabs.Screen
-          name="groups"
-          options={{
-            tabBarShowLabel: false,
-            headerShown: false,
-            tabBarIcon: ({ color }) => <GroupIcon color={color} />,
           }}
         />
         <Tabs.Screen
@@ -60,11 +53,11 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="settings"
+          name="inbox"
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <CogIcon color={color} />,
+            tabBarIcon: ({ color }) => <Feather name="inbox" size={30} color={color} />,
           }}
         />
         <Tabs.Screen
@@ -89,7 +82,17 @@ export default function TabLayout() {
             href: null,
           }}
         />
-
+        <Tabs.Screen
+          name="profile/[user]"
+          options={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              display: 'none'
+            },
+            href: null,
+          }}
+        />
       </Tabs >
     </MainProvider>
   );

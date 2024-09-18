@@ -94,13 +94,15 @@ export default function postPreview() {
               <TouchableOpacity className=' w-[42] h-[42] bg-[#13131080] justify-center rounded-full' onPress={goBack}>
                 <Ionicons className='mr-3' name="caret-back-outline" size={38} color="#E4FF66" />
               </TouchableOpacity>
+              <CustomText text=''></CustomText>
             </View>
             <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset='12' className='flex-[1] flex-row justify-between items-end'>
               <TextInput
                 ref={textField}
                 onChangeText={onChangeDesc}
                 value={description}
-                placeholderTextColor="#1A2E05"
+                placeholderTextColor="#E4FF66"
+                style={{ fontFamily: 'Medium' }}
                 className=" flex-[4] border-[#131310] border-2 rounded-full px-6 py-3 text-[#E4FF66] text-20"
                 //                style={{
                 //                  shadowColor: "#000",

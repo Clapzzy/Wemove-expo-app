@@ -54,39 +54,38 @@ export default function Home() {
     )
   }
   return (
-    <View className="items-center bg-[#262626] flex-1 color-white">
-      <ImageBackground className="w-full h-full" source={require('assets/waves2.png')}>
-        <SafeAreaView>
-          <ScrollView>
-            <View className="w-fit justify-between flex-row mx-4 mb-8">
-              <Image source={require("../../../assets/pfp.png")} />
-              <Image className="mt-2" source={require("../../../assets/inbox.png")} />
-            </View>
-            <View className="w-full p-4 flex-col">
-              <View className="flex-row">
-                <Image source={require("../../../assets/pfp.png")} />
-                <View className="flex-col mt-2 ml-1">
-                  <CustomText text="DisplayUsername1" type="Bold" className="text-14 text-[#C1F173]" />
-                  <CustomText text="@Username1" type="Medium" className="text-12 text-[#777777]" />
-                </View>
+    <View className="items-center bg-[#060605] flex-1 color-white">
+      <SafeAreaView>
+        <ScrollView>
+          <View className="w-full p-4 flex-col">
+            <View className="flex-row">
+              <Pressable onPress={async () => {
+                const username = await AsyncStorage.getItem("username")
+                router.push(`/(main)/profile/${username}`)
+              }}>
+                <Image className='rounded-full h-14 w-14 ' source={require("../../../assets/car1.png")} />
+              </Pressable>
+              <View className="flex-col mt-2 ml-1">
+                <CustomText text="DisplayUsername1" type="Bold" className="text-14 text-[#C1F173]" />
+                <CustomText text="@Username1" type="Medium" className="text-12 text-[#777777]" />
               </View>
-              <CustomText
-                text='I  built my first JavaScript framework: "use use"  1. Add HTML tags using "use ___" 2. Place content inline with "" 3. Indentation matters just like in Python  Demo: https://main.d3o2eeyo5g73j4.amplifyapp.com  Spaghetti source code: https://github.com/renebrandel/use-use'
+            </View>
+            <CustomText
+              text='I  built my first JavaScript framework: "use use"  1. Add HTML tags using "use ___" 2. Place content inline with "" 3. Indentation matters just like in Python  Demo: https://main.d3o2eeyo5g73j4.amplifyapp.com  Spaghetti source code: https://github.com/renebrandel/use-use'
                 type="Regular"
-                className=" ml-3 text-14 text-[#E5E5E5]"
+                className=" ml-3  mt-5 text-14 text-[#E5E5E5]"
               />
               <Image
                 source={{
                   uri: `data:image/jpeg;base64,${image}`,
                 }}
-                style={{ height: 400, width: 358, borderRadius: 10}}
-                className='mt-2'
-              />
-            </View>
+              style={{ height: 400, width: 358, borderRadius: 10}}
+              className='mt-2'
+            />
+          </View>
           </ScrollView>
         </SafeAreaView>
-      </ImageBackground>
-    </View>
+    </View> 
   );  
 }
               

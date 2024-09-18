@@ -12,6 +12,7 @@
     "global.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/helper/challanges.ts"
+    "src/helper/challanges.ts",
+    "src/app/(main)/search.jsx"
   ]
 }
