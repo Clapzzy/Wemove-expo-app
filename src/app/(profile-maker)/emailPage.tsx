@@ -1,6 +1,7 @@
 import { Link, router } from "expo-router";
-import { View, Keyboard, TextInput, Text, ImageBackground, TouchableWithoutFeedback } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, TouchableOpacity, Keyboard, TextInput, Text, ImageBackground, TouchableWithoutFeedback } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from '@expo/vector-icons/';
 import { useContext, useEffect, useRef, useState } from "react";
 import CustomText from "@/components/customText";
 import PrimaryButtonRegister from "@/components/buttonPrimary";
@@ -8,6 +9,7 @@ import PrimaryButtonRegister from "@/components/buttonPrimary";
 import RegisterContext from "@/helper/loginContext";
 export default function SignIn() {
   const formData = useContext(RegisterContext)
+  const insets = useSafeAreaInsets()
   const textField = useRef(null)
   const [isBadEmail, setBadEmail] = useState(false)
   const [email, setEmail] = useState('')
@@ -36,11 +38,14 @@ export default function SignIn() {
   }
   return (
     <View className="items-center bg-[#080707] flex-1 color-white">
-      <ImageBackground className="w-full h-full" source={require('assets/waves3.png')}>
-        <SafeAreaView>
-          <TouchableWithoutFeedback onPress={closeKeyboard}>
+      <ImageBackground style={{ paddingTop: insets.top }} className="w-full h-full" source={require('assets/waves3.png')}>
+        <TouchableWithoutFeedback onPress={closeKeyboard}>
+          <>
+            <TouchableOpacity className=' left-4 w-[42] h-[42]  bg-[#13131080] justify-center rounded-full' onPress={() => { router.back() }}>
+              <Ionicons className='mr-3' name="caret-back-outline" size={38} color="#E4FF66" />
+            </TouchableOpacity>
             <View className="items-center w-full h-full">
-              <CustomText text="What's your email?" className=" p-5 text-24 text-[#E5E5E5] mt-6 mb-6" type="Bold"></CustomText>
+              <CustomText text="What's your email?" className=" p-5 text-24 text-[#E5E5E5] mt-10 mb-6" type="Bold"></CustomText>
               <TextInput
                 ref={textField}
                 onChangeText={onChangeEmail}
@@ -54,6 +59,7 @@ export default function SignIn() {
                   },
                   shadowOpacity: 0.34,
                   shadowRadius: 1.27,
+                  fontFamily: 'Regular',
                   elevation: 10,
                 }}
                 placeholder="E-mail"
@@ -65,8 +71,8 @@ export default function SignIn() {
               }
               <PrimaryButtonRegister onPress={nextPage} text="Next ->" backgroundColorButton="#E4FF65" textColor="#1A2E05" className="mt-56" />
             </View>
-          </TouchableWithoutFeedback>
-        </SafeAreaView>
+          </>
+        </TouchableWithoutFeedback>
       </ImageBackground >
     </View >
   );

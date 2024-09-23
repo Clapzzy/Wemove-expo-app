@@ -3,15 +3,18 @@ import { TouchableOpacity, ImageBackground, Pressable, TextInput, View, Touchabl
 import MainContext from '@/helper/mainScreensContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons/';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addPost } from '@/helper/addPosts';
 import CustomText from '@/components/customText';
 import { router, useFocusEffect } from 'expo-router';
 
 export default function postPreview() {
+  const insets = useSafeAreaInsets()
   const contextData = useContext(MainContext)
+  const queryClient = useQueryClient()
   const [image, setImage] = useState(null)
+  const [isDisabled, setIsDisabled] = useState(false)
   const textField = useRef(null)
   const [description, setDescription] = useState<string>('')
 
@@ -23,7 +26,14 @@ export default function postPreview() {
 
   const postMutation = useMutation({
     mutationFn: addPost,
+    onMutate(variables) {
+      setIsDisabled(true)
+    },
     onSuccess(data, variables, context) {
+      setDescription("")
+      queryClient.invalidateQueries({
+        queryKey: ["posts", "home"]
+      })
       router.push("/(main)/home")
     },
     onSettled(data, error, variables, context) {
@@ -45,7 +55,7 @@ export default function postPreview() {
   }
 
   const sendPost = async () => {
-    postMutation.mutate({ description, image, userId: '661bf127eef0685e54415c3e' })
+    postMutation.mutate({ description, image })
     console.log("post")
   }
   //TODO fix this
@@ -89,7 +99,7 @@ export default function postPreview() {
     <View className='flex-[1] justify-center'>
       <ImageBackground className='flex-[1]' source={{ uri: `data:image/jpeg;base64,${image}` }}>
         <TouchableWithoutFeedback onPress={dismissKeyboard}>
-          <SafeAreaView style={{ flex: 1, padding: 12 }} >
+          <View style={{ paddingHorizontal: 12, paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }} >
             <View className='flex-[1]'>
               <TouchableOpacity className=' w-[42] h-[42] bg-[#13131080] justify-center rounded-full' onPress={goBack}>
                 <Ionicons className='mr-3' name="caret-back-outline" size={38} color="#E4FF66" />
@@ -117,11 +127,11 @@ export default function postPreview() {
                 placeholder="Description"
               >
               </TextInput>
-              <TouchableOpacity className=' py-1.5 px-1.5 ml-3 flex-[1] bg-[#13131080] justify-center items-center rounded-full' onPress={sendPost}>
+              <TouchableOpacity disabled={isDisabled} className=' py-1.5 px-1.5 ml-3 flex-[1] bg-[#13131080] justify-center items-center rounded-full' onPress={sendPost}>
                 <Ionicons className='ml-1.5' name="send" size={38} color="#E4FF66" />
               </TouchableOpacity>
             </KeyboardAvoidingView>
-          </SafeAreaView>
+          </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
     </View>

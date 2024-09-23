@@ -1,26 +1,47 @@
-import { Link, router } from "expo-router";
-import { Text, Image, View, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { Text, Image, View, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, FlatList, ScrollView, FlatListComponent } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRef, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../../helper/challanges"
 import CustomText from "@/components/customText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import MainContext from "@/helper/mainScreensContext";
+import PostItem from "@/components/postItem";
 
 export default function Home() {
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ['posts', "home"],
+    queryFn: ({ pageParam }) => {
+      return fetchPosts(pageParam)
+    },
+    initialPageParam: { lastId: '' },
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      return { lastId: lastPage[lastPage?.length - 1]?._id }
+    }
+  })
 
   const [image, changeImage] = useState(null)
   const myData = useContext(MainContext)
+  const insets = useSafeAreaInsets()
 
   const getImage = async () => {
     const pic = await AsyncStorage.getItem("tempPic")
     changeImage(pic)
-    console.log(image + "          dsajdoashdoaodajda");
-    console.log(myData.data.currentPicUrl + "            hellok");
     return pic
   }
+
+  const viewabilityConfig = useRef({
+    viewAreaCoveragePercentThreshold: 20,
+  })
 
   const queryChallenges = useQuery({
     queryKey: ['image'],
@@ -54,38 +75,56 @@ export default function Home() {
     )
   }
   return (
-    <View className="items-center bg-[#060605] flex-1 color-white">
-      <SafeAreaView>
-        <ScrollView>
-          <View className="w-full p-4 flex-col">
-            <View className="flex-row">
-              <Pressable onPress={async () => {
-                const username = await AsyncStorage.getItem("username")
-                router.push(`/(main)/profile/${username}`)
-              }}>
-                <Image className='rounded-full h-14 w-14 ' source={require("../../../assets/car1.png")} />
-              </Pressable>
-              <View className="flex-col mt-2 ml-1">
-                <CustomText text="DisplayUsername1" type="Bold" className="text-14 text-[#C1F173]" />
-                <CustomText text="@Username1" type="Medium" className="text-12 text-[#777777]" />
-              </View>
-            </View>
-            <CustomText
-              text='I  built my first JavaScript framework: "use use"  1. Add HTML tags using "use ___" 2. Place content inline with "" 3. Indentation matters just like in Python  Demo: https://main.d3o2eeyo5g73j4.amplifyapp.com  Spaghetti source code: https://github.com/renebrandel/use-use'
-                type="Regular"
-                className=" ml-3  mt-5 text-14 text-[#E5E5E5]"
-              />
-              <Image
+    <View className="items-center bg-[#060605] flex-[1] color-white">
+      <View className=" flex-[1] w-full  flex-col">
+        <FlatList
+          style={{ paddingTop: insets.top + 12 }}
+          className="w-full"
+          data={data?.pages.flat()}
+          keyExtractor={item => {
+            return item._id
+          }}
+          showsVerticalScrollIndicator={false}
+          onViewableItemsChanged={({ viewableItems, changed }) => {
+            const lastVisableItem = viewableItems[viewableItems.length - 1]
+
+            if (lastVisableItem) {
+              const { index } = lastVisableItem
+              if (index >= data.pages.flat().length - 3) {
+                const lastPage = data?.pages[data?.pages.length - 1]
+                if (lastPage == 0 && lastPage < data?.pages[data?.pages.length - 2]) {
+
+                } else {
+                  fetchNextPage()
+                }
+              }
+            }
+          }}
+          viewabilityConfig={viewabilityConfig.current}
+          renderItem={(item) => {
+            return (
+              <PostItem
+                pfpUrl={item.item.userPfp}
+                attachmentUrl={item.item.attachmentUrl}
+                username={item.item.username}
+                challengeDesc={item.item.challengeDesc}
+                description={item.item.text}
+                datePosted={item.item.datePosted}
+              >
+              </PostItem>
+            )
+          }}
+
+        />
+      </View>
+    </View >
+  );
+}
+
+/* <Image
                 source={{
                   uri: `data:image/jpeg;base64,${image}`,
-                }}
-              style={{ height: 400, width: 358, borderRadius: 10}}
-              className='mt-2'
+                }u}    n
+              className='mt-2 h-full rounded-xl'
             />
-          </View>
-          </ScrollView>
-        </SafeAreaView>
-    </View> 
-  );  
-}
-              
+            */

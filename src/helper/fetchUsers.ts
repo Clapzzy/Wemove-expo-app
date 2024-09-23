@@ -14,7 +14,6 @@ export const fetchUsers = async ({ searchKeyword, lastId }: searchParams) => {
         lastId
       }
     });
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.log('i am getting an error :' + error)

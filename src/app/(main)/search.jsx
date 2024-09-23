@@ -1,7 +1,7 @@
 import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image, Text, View, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, ScrollView, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useEffect, useRef, useState } from "react";
 import CustomText from "@/components/customText";
 import { fetchUsers } from "@/helper/fetchUsers";
@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //}
 export default function Search() {
 
+  const insets = useSafeAreaInsets()
   const [search, setSearch] = useState('')
 
   const {
@@ -48,60 +49,59 @@ export default function Search() {
 
   return (
     <TouchableWithoutFeedback className='flex-[1]' onPress={removeKeyboard}>
-      <View className="bg-[#060605] flex-[1]">
-        <SafeAreaView className="flex-[1]">
-          <View className="px-6"  >
-            <CustomText text="Search" type="ExtraBold" className="text-[#BFE500] text-32" />
-            <View className="flex-row items-center bg-[#131311] opacity-70 text-20 text-[#A3A3A3] h-10 mt-6 rounded-lg  pl-3" >
-              <MaterialIcons name="search" size={20} color="#A3A3A3" className="relative " />
-              <TextInput
-                className="bg-[#131311] flex-[1] text-20 text-[#666666] h-10 rounded-lg pl-2"
-                style={{ fontFamily: 'Regular' }}
-                onChangeText={setSearch}
-                textInp
-                placeholder="Search"
-                placeholderTextColor="#666666"
-                value={search}
-              >
-              </TextInput>
-            </View>
-            <FlatList
-              className="mb-64 w-full"
-              data={data?.pages.flat()}
-              keyExtractor={item => item.username}
-              showsVerticalScrollIndicator={false}
-              onViewableItemsChanged={({ viewableItems, changed }) => {
-                const lastVisibleItem = viewableItems[viewableItems.length - 1];
+      <View style={{ paddingTop: insets.top }} className="bg-[#060605] flex-[1]">
+        <View className="px-6"  >
+          <CustomText text="Search" type="ExtraBold" className="text-[#BFE500] text-32" />
+          <View className="flex-row items-center bg-[#131311] opacity-70 text-20 text-[#A3A3A3] h-10 mt-6 rounded-lg  pl-3" >
+            <MaterialIcons name="search" size={20} color="#A3A3A3" className="relative " />
+            <TextInput
+              className="bg-[#131311] flex-[1] text-20 text-[#666666] h-10 rounded-lg pl-2"
+              style={{ fontFamily: 'Regular' }}
+              onChangeText={setSearch}
+              textInp
+              placeholder="Search"
+              placeholderTextColor="#666666"
+              value={search}
+            >
+            </TextInput>
+          </View>
+          <FlatList
+            className="mb-64 w-full"
+            data={data?.pages.flat()}
+            keyExtractor={item => item.username}
+            showsVerticalScrollIndicator={false}
+            onViewableItemsChanged={({ viewableItems, changed }) => {
+              const lastVisibleItem = viewableItems[viewableItems.length - 1];
 
-                if (lastVisibleItem) {
-                  const { index } = lastVisibleItem;
+              if (lastVisibleItem) {
+                const { index } = lastVisibleItem;
 
-                  //!!!!!!!!!!!losho ako ima mnnogo nesta v data!
-                  if (index >= data?.pages.flat().length - 3) {
-                    const lastPage = data?.pages[data?.pages.length - 1]
-                    if (lastPage == 0 && lastPage < data?.pages[data?.pages.length - 2]) {
+                //!!!!!!!!!!!losho ako ima mnnogo nesta v data!
+                //ako db-to ot koeto data idva e po-malko ot 2 data.pages tova fetch-va dva puti kogato trqbva samo vednuz 
+                if (index >= data?.pages.flat().length - 3) {
+                  const lastPage = data?.pages[data?.pages.length - 1]
+                  if (lastPage == 0 && lastPage < data?.pages[data?.pages.length - 2]) {
 
-                    } else {
-                      fetchNextPage()
-                    }
+                  } else {
+                    fetchNextPage()
                   }
                 }
-              }}
-              viewabilityConfig={viewabilityConfig.current}
-              renderItem={(item) => {
-                return (
-                  <SearchItem
-                    username={item.item.username}
-                    displayName={item.item.displayName}
-                    pfpUrl={item.item.pictureUrl}
-                  >
-                  </SearchItem>
-                )
-              }}
-            >
-            </FlatList>
-          </View>
-        </SafeAreaView>
+              }
+            }}
+            viewabilityConfig={viewabilityConfig.current}
+            renderItem={(item) => {
+              return (
+                <SearchItem
+                  username={item.item.username}
+                  displayName={item.item.displayName}
+                  pfpUrl={item.item.pictureUrl}
+                >
+                </SearchItem>
+              )
+            }}
+          >
+          </FlatList>
+        </View>
       </View >
     </TouchableWithoutFeedback>
   );

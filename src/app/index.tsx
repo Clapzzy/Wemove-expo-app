@@ -6,17 +6,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { setTSpan } from "react-native-svg/lib/typescript/lib/extract/extractText";
 
 export default function Page() {
+  const checkWhereToGo = async () => {
+
+    const foundUsername = await AsyncStorage.getItem("username")
+    if (!foundUsername) {
+      router.push('/(profile-maker)/startPage')
+    } else {
+      router.push('/(main)/challenges')
+    }
+    //router.push('/(profile-maker)/termsPage')
+  }
+
   useEffect(() => {
     setTimeout(() => {
-      AsyncStorage.setItem("username", "ImpsumLorem")
-      const today = new Date();
-      const nextDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
-      console.log(nextDay)
-      const unixTimeNextDayStart = Math.floor(nextDay.getTime() / 1000);
-      console.log(unixTimeNextDayStart)
-
-      router.push('/(main)/search')
-      //      router.push('/(profile-maker)/startPage')
+      checkWhereToGo()
     }, 1)
   }, [])
 

@@ -15,19 +15,29 @@ export const fetchChallenges = async () => {
     throw new Error(error)
   }
 };
-export const fetchWeeklyChallenges = async () => {
+export const fetchPosts = async ({ lastId }) => {
   try {
-    const response = await axios.get(`http://3.77.19.140:3000/challenges/random?timeframe=weekly&numberOfChallenges=1`);
+    const response = await axios.get("http://3.77.19.140:3000/posts/", {
+      params: {
+        lastId
+      }
+    })
     return response.data
   } catch (error) {
-    throw error
+    return Promise.reject(error)
   }
-};
-export const fetchPosts = async () => {
+}
+
+export const fetchUserSpecificPosts = async ({ lastId, username }) => {
   try {
-    const response = await axios.get("http://3.77.19.140:3000/post/getPosts")
+    const response = await axios.get("http://3.77.19.140:3000/posts/user", {
+      params: {
+        username,
+        lastId
+      }
+    })
     return response.data
   } catch (error) {
-    return error
+    return Promise.reject(error)
   }
 }
