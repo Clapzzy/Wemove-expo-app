@@ -20,9 +20,9 @@ export default function StartPage() {
   return (
     <View className="items-center bg-[#080707] flex-1 color-white">
       <ImageBackground style={{ paddingTop: insets.top }} className="w-full h-full" source={require('assets/waves3.png')}>
-        <View className="w-full items-center ">
+        <View className="flex-[1] justify-between items-center ">
           <Image className="mt-[130]" source={require("assets/logo.png")} />
-          <View className="mt-[320]">
+          <View style={{ paddingBottom: insets.bottom + 24 }}>
             <PrimaryButtonRegister onPress={press} style={{ shadowColor: "#000", shadowOffset: { width: 4, height: 4 }, shadowRaduis: 5, shadowOpacity: 0.39 }} text="Sign up with phone" backgroundColorButton="#737373" textColor="#A3A3A3" />
             <PrimaryButtonRegister onPress={press} style={{ shadowColor: "#000", shadowOffset: { width: 4, height: 4 }, shadowRaduis: 5, shadowOpacity: 0.39 }} className='mt-[12]' text="Sign up with email" backgroundColorButton="#E4FF65" textColor="#1A2E05" />
             <View className="flex-row mt-[16]">

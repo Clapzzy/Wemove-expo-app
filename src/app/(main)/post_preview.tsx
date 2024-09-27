@@ -47,7 +47,6 @@ export default function postPreview() {
 
   const onChangeDesc = (input) => {
     setDescription(input)
-    console.log(description)
   }
 
   const dismissKeyboard = () => {

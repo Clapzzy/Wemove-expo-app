@@ -51,7 +51,6 @@ export default function App() {
     contextData.editInfo({ "currentPicUrl": photo.uri })
     await AsyncStorage.removeItem("tempPic")
     await AsyncStorage.setItem("tempPic", photo.base64)
-    console.log(photo.uri)
     router.push("/(main)/post_preview")
   }
   //TODO add grid option

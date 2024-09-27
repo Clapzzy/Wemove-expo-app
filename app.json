@@ -17,7 +17,12 @@
       "adaptiveIcon": {
         "foregroundImage": "assets/splash/adaptive-icon.png",
         "backgroundColor": "#141414"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA"
+      ],
+      "package": "com.jorkobg.WemoveApp"
     },
     "plugins": [
       [
@@ -43,6 +48,11 @@
       "expo-font"
     ],
     "name": "WemoveApp",
-    "slug": "WemoveApp"
+    "slug": "WemoveApp",
+    "extra": {
+      "eas": {
+        "projectId": "209adedb-8393-46af-9313-cfb0ebc64504"
+      }
+    }
   }
 }

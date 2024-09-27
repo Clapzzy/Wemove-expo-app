@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { TouchableOpacity, FlatList, View, Pressable, Image, TextInput, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Modal } from 'react-native';
+import { TouchableOpacity, FlatList, View, Pressable, Image, TextInput, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Modal, ImageBackground, Animated } from 'react-native';
 import MainContext from '@/helper/mainScreensContext';
-import { Ionicons } from '@expo/vector-icons/';
+import { Ionicons, Feather } from '@expo/vector-icons/';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomText from '@/components/customText';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
@@ -12,7 +12,18 @@ import PostItem from '@/components/postItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker'
 import { updateUser } from '@/helper/updateUser';
+import { BlurView } from 'expo-blur';
 
+const HEADER_HEIGHT_NARROWED = 90
+const HEADER_HEIGHT_EXPANDED = 35
+
+const AnimatedImageBackground = Animated.createAnimatedComponent(
+  ImageBackground
+)
+
+const AnimatedBlurView = Animated.createAnimatedComponent(
+  BlurView
+)
 
 export default function postPreview() {
   const queryClient = useQueryClient()
@@ -136,6 +147,8 @@ export default function postPreview() {
     Keyboard.dismiss()
   }
 
+  const scrollY = useRef(new Animated.Value(0)).current
+
   return (
     <View className="items-center bg-[#060604] flex-[1] color-white">
       {/* Make this have an custom animation so the dim bg appears right away and the content slides */}
@@ -199,80 +212,250 @@ export default function postPreview() {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-      <FlatList
+      <TouchableOpacity
+        style={{
+          zIndex: 10,
+          top: insets.top - 4,
+          elevation: 2
+        }}
+        hitSlop={{ top: 40, bottom: 40, right: 40, left: 40 }}
+        className='absolute left-4 w-[38] h-[38] bg-[#13131080] justify-center rounded-full'
+        onPress={() => { router.back() }}
+      >
+        <Ionicons className='mr-3' name="caret-back-outline" size={34} color="#E4FF66" />
+      </TouchableOpacity>
+      <Animated.View
+        style={{
+          zIndex: 10,
+          position: "absolute",
+          top: insets.top - 3,
+          left: 0,
+          right: 0,
+          alignItems: 'center',
+          opacity: scrollY.interpolate({
+            inputRange: [-20, 0],
+            outputRange: [1, 0],
+          }),
+          transform: [
+            {
+              rotate: scrollY.interpolate({
+                inputRange: [-60, -35],
+                outputRange: ['180deg', '0deg'],
+                extrapolate: 'clamp'
+              })
+            }
+          ]
+        }}
+      >
+        <Feather name='arrow-down' size={30} color="#E4FF66" />
+      </Animated.View>
+      <Animated.View
+        style={{
+          zIndex: 2,
+          position: "absolute",
+          top: insets.top - 8,
+          right: 0,
+          left: 0,
+          alignItems: "center",
+          opacity: scrollY.interpolate({
+            inputRange: [90, 120],
+            outputRange: [0, 1],
+            extrapolate: "clamp"
+          }),
+          transform: [
+            {
+              translateY: scrollY.interpolate({
+                inputRange: [90, 120],
+                outputRange: [30, 0],
+                extrapolate: "clamp"
+              })
+            }
+          ]
+        }}
+      >
+        <CustomText text={queryProfile.data?.displayName} type="SemiBold" className=" relative top-1 text-18 color-[#E4FF66]" />
+        <CustomText text="100 challenges" type="Regular" className="color-[#E4FF66]" />
+      </Animated.View>
+      {queryProfile.data?.backgroundName == "Default"
+        ? (<Animated.View
+          style={{
+            height: HEADER_HEIGHT_NARROWED + HEADER_HEIGHT_EXPANDED,
+            transform: [
+              {
+                scale: scrollY.interpolate({
+                  inputRange: [-200, 0],
+                  outputRange: [5, 1],
+                  extrapolateLeft: 'extend',
+                  extrapolateRight: 'clamp'
+                })
+              }
+            ]
+          }}
+          className=' absolute w-full bg-zinc-600'
+        ></Animated.View>)
+        : (<AnimatedImageBackground
+          style={{
+            height: HEADER_HEIGHT_NARROWED + HEADER_HEIGHT_EXPANDED,
+            transform: [
+              {
+                scale: scrollY.interpolate({
+                  inputRange: [-200, 0],
+                  outputRange: [5, 1],
+                  extrapolateLeft: 'extend',
+                  extrapolateRight: 'clamp'
+                })
+              }
+            ]
+          }}
+          className='absolute w-full '
+          source={{ uri: queryProfile?.data?.backgroundUrl }}
+        >
+          <AnimatedBlurView
+            className='flex-[1]'
+            experimentalBlurMethod='dimezisBlurView'
+            tint='dark'
+            intensity={94}
+            style={{
+              opacity: scrollY.interpolate({
+                inputRange: [-50, 0, 50, 120],
+                outputRange: [1, 0, 0, 1],
+              })
+            }}
+          ></AnimatedBlurView>
+          {/*this can cause alot of performace issues on android ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/}
+        </AnimatedImageBackground>)
+      }
+      <Animated.FlatList
         ListHeaderComponent={() => {
           return (
-            <View className="w-full " >
-              {queryProfile.data?.backgroundName == "Default"
-                ? (<View className='w-full h-40 bg-zinc-600'></View>)
-                : (<Image className='w-full h-40' source={{ uri: queryProfile?.data?.backgroundUrl }} />)
-              }
-              <TouchableOpacity style={{ top: insets.top + 4 }} className=' absolute left-4 w-[42] h-[42] bg-[#13131080] justify-center rounded-full' onPress={() => { router.back() }}>
-                <Ionicons className='mr-3' name="caret-back-outline" size={38} color="#E4FF66" />
-              </TouchableOpacity>
+            <View className="w-full bg-[#060604]" >
               <View className='flex-[1] px-4'>
-                <View className='h-28 w-full flex-row justify-between items-center rounded-full relative bottom-7 mb-3'>
-                  <View className='w-[100] h-[100] justify-center rounded-full bg-[#080707] p-1'>
+                <Animated.View
+                  style={{
+                    transform: [{
+                      translateY: scrollY.interpolate({
+                        inputRange: [0, HEADER_HEIGHT_EXPANDED + 90],
+                        outputRange: [0, 40],
+                        extrapolate: "clamp"
+                      })
+                    }]
+                  }}
+                  className='h-28 w-full flex-row justify-between items-center rounded-full relative bottom-7 mb-3'
+                >
+                  <Animated.View
+                    style={{
+                      transform: [
+                        {
+                          scale: scrollY.interpolate({
+                            inputRange: [0, HEADER_HEIGHT_EXPANDED + 20],
+                            outputRange: [1, 0.6],
+                            extrapolate: "clamp"
+                          })
+                        },
+                      ]
+                    }}
+
+                    className='w-[100] h-[100] justify-center rounded-full bg-[#080707] p-1'
+                  >
                     <Image
-                      source={queryProfile?.data?.pictureUrl == "" ? require('../../../../assets/pfp2.png') : { uri: queryProfile.data?.pictureUrl }}
+                      source={
+                        queryProfile?.data?.pictureUrl == ""
+                          ? require('../../../../assets/pfp2.png')
+                          : { uri: queryProfile.data?.pictureUrl }
+                      }
                       className=" rounded-full w-full h-full"
                     ></Image>
-                  </View>
-                  <Pressable style={urlParams?.user == username ? {} : { display: 'none' }} onPress={() => { setModalVisible(!modalVisible) }}>
-                    <View className=' justify-center items-center rounded-xl px-6 py-1.5 border-2 mt-3 border-zinc-600'>
-                      <CustomText className="tracking-tight text-14 color-[#696969]" type="SemiBold" text="Edit profile" ></CustomText>
-                    </View>
-                  </Pressable>
+                  </Animated.View>
+                  <Animated.View
+                    style={{
+                      transform: [{
+                        translateY: scrollY.interpolate({
+                          inputRange: [0, HEADER_HEIGHT_EXPANDED + 40],
+                          outputRange: [0, -12],
+                          extrapolate: "clamp"
+                        })
+                      }]
+
+                    }}
+                  >
+                    <Pressable style={urlParams?.user == username ? {} : { display: 'none' }} onPress={() => { setModalVisible(!modalVisible) }}>
+                      <View className=' justify-center items-center rounded-xl px-6 py-1.5 border-2 mt-3 border-zinc-600'>
+                        <CustomText className="tracking-tight text-14 color-[#696969]" type="SemiBold" text="Edit profile" ></CustomText>
+                      </View>
+                    </Pressable>
+                  </Animated.View>
                   {/*TODO make this a component ^^^^^^*/}
-                </View>
-                <View className='flex-[1] relative bottom-7'>
+                </Animated.View>
+                <Animated.View
+                  style={{
+                    position: "relative",
+                  }}
+                  className='flex-[1] relative'
+                >
                   <CustomText text={queryProfile.data?.displayName} type="ExtraBold" className="text-22 color-[#C2DC55]" />
-                  <View className='flex-row gap-2 mt-3'>
+                  <View className='flex-row gap-2 mt-1'>
                     <CustomText text={'@' + queryProfile.data?.username} type="Medium" className="text-15 color-[#D9F99D]" />
                     <CustomText text="." type="Black" className="relative bottom-2 text-20 color-[#D9F99D]" />
                     <CustomText text="Joined Sept 2024" type="Regular" className="text-15 color-[#D9F99D]" />
                   </View>
                   <View className='mt-5 flex-row justify-between'>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text="0" type="ExtraBold" className="color-gray-100 text-16" />
+                      <CustomText text="0" type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
-                        <CustomText text="Day" type="Regular" className="color-gray-200 text-16" />
-                        <CustomText text="Streak" type="Regular" className="color-gray-200 text-16" />
+                        <CustomText text="Day" type="Regular" className="color-gray-200 text-15" />
+                        <CustomText text="Streak" type="Regular" className="color-gray-200 text-15" />
                       </View>
                     </View>
                     <View className='h-full w-0.5 rounded-full bg-zinc-700'></View>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text="0" type="ExtraBold" className="color-gray-100 text-16" />
+                      <CustomText text="0" type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
-                        <CustomText text="Challanges" type="Regular" className="color-gray-200 text-16" />
-                        <CustomText text="Completed" type="Regular" className="color-gray-200 text-16" />
+                        <CustomText text="Challanges" type="Regular" className="color-gray-200 text-15" />
+                        <CustomText text="Completed" type="Regular" className="color-gray-200 text-15" />
                       </View>
                     </View>
                     <View className='h-full w-0.5 rounded-full bg-zinc-700'></View>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text="1st" type="ExtraBold" className="color-gray-100 text-16" />
+                      <CustomText text="1st" type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
-                        <CustomText text="in" type="Regular" className="color-gray-200 text-16" />
-                        <CustomText text="Bulgaria" type="Regular" className="color-gray-200 text-16" />
+                        <CustomText text="in" type="Regular" className="color-gray-200 text-15" />
+                        <CustomText text="Bulgaria" type="Regular" className="color-gray-200 text-15" />
                       </View>
                     </View>
                   </View>
                   <View className='w-full h-[1] bg-zinc-700 mt-4'></View>
-                </View>
+                </Animated.View>
               </View>
             </View >
           )
         }}
         className="w-full "
-        alwaysBounceVertical={false}
-        alwaysBounceHorizontal={false}
-        bounces={false}
+        style={{
+          zIndex: 3,
+          elevation: 3,
+          marginTop: HEADER_HEIGHT_NARROWED,
+          paddingTop: HEADER_HEIGHT_EXPANDED,
+        }}
         scrollEventThrottle={16}
         data={data?.pages.flat()}
         keyExtractor={item => {
           return item._id
         }}
         showsVerticalScrollIndicator={false}
+        onScroll={
+          Animated.event([
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: scrollY
+                }
+              }
+            }
+          ],
+            {
+              useNativeDriver: true
+            })
+        }
         onViewableItemsChanged={({ viewableItems, changed }) => {
           const lastVisableItem = viewableItems[viewableItems.length - 1]
 

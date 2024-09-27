@@ -14,7 +14,6 @@ export const updateUser = async ({ pfpBase64, bgPicBase64, displayUsername }) =>
       backgroundImage: bgPicBase64,
       displayName: displayUsername,
     });
-    console.log(response.data)
     return response.data
   } catch (error) {
     return Promise.reject(error)

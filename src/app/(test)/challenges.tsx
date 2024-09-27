@@ -83,10 +83,7 @@ export default function Challenges() {
 
   return (
     <View className="items-center bg-[#060605] flex-1 color-white">
-      <ScrollView
-        style={{ paddingTop: insets.top, width: "100%" }}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView style={{ paddingTop: insets.top, width: "100%" }}>
         <View className="w-full justify-between flex-row mx-4">
           <Pressable onPress={async () => {
             const username = await AsyncStorage.getItem("username")
@@ -151,7 +148,6 @@ export default function Challenges() {
             </View>
           )
         })}
-        <View className="w-full h-52"></View>
       </ScrollView>
     </View >
   );

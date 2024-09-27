@@ -1,6 +1,6 @@
-import { Text, Image, View, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, FlatList, ScrollView, FlatListComponent } from "react-native";
+import { Text, Image, View, ImageBackground, Animated, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, FlatList, ScrollView, FlatListComponent } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../../helper/challanges"
 import CustomText from "@/components/customText";
@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import MainContext from "@/helper/mainScreensContext";
 import PostItem from "@/components/postItem";
+
 
 export default function Home() {
   const {
@@ -32,6 +33,11 @@ export default function Home() {
   const [image, changeImage] = useState(null)
   const myData = useContext(MainContext)
   const insets = useSafeAreaInsets()
+  const HEADER_HEIGHT = insets.top + 50
+  const SCROLL_THRESHOLD = 300
+  const SCROLL_LOCK = 100
+  const scrollY = useRef(new Animated.Value(0)).current
+  const diffClampScrollY = useRef(Animated.diffClamp(scrollY, 0, HEADER_HEIGHT + SCROLL_THRESHOLD + SCROLL_LOCK)).current
 
   const getImage = async () => {
     const pic = await AsyncStorage.getItem("tempPic")
@@ -41,14 +47,13 @@ export default function Home() {
 
   const viewabilityConfig = useRef({
     viewAreaCoveragePercentThreshold: 20,
+    waitForInteraction: false,
   })
 
   const queryChallenges = useQuery({
     queryKey: ['image'],
     queryFn: () => getImage()
   })
-
-
 
   if (queryChallenges.isLoading) {
     return (
@@ -74,44 +79,74 @@ export default function Home() {
 
     )
   }
+
+
+
+
   return (
     <View className="items-center bg-[#060605] flex-[1] color-white">
       <View className=" flex-[1] w-full  flex-col">
-        <FlatList
-          style={{ paddingTop: insets.top + 12 }}
+        <Animated.FlatList
           className="w-full"
+          style={{
+            zIndex: 1
+          }}
           data={data?.pages.flat()}
           keyExtractor={item => {
             return item._id
           }}
           showsVerticalScrollIndicator={false}
-          onViewableItemsChanged={({ viewableItems, changed }) => {
-            const lastVisableItem = viewableItems[viewableItems.length - 1]
-
-            if (lastVisableItem) {
-              const { index } = lastVisableItem
+          onScroll={Animated.event([
+            {
+              nativeEvent: {
+                contentOffset: { y: scrollY }
+              }
+            }
+          ],
+            {
+              useNativeDriver: true
+            })}
+          onViewableItemsChanged={({ viewableItems }) => {
+            const lastVisibleItem = viewableItems[viewableItems.length - 1];
+            if (lastVisibleItem) {
+              const { index } = lastVisibleItem;
+              console.log(index);
               if (index >= data.pages.flat().length - 3) {
-                const lastPage = data?.pages[data?.pages.length - 1]
-                if (lastPage == 0 && lastPage < data?.pages[data?.pages.length - 2]) {
-
-                } else {
-                  fetchNextPage()
-                }
+                fetchNextPage();
               }
             }
           }}
           viewabilityConfig={viewabilityConfig.current}
+          ListHeaderComponent={() => (<Animated.View
+            style={{
+              zIndex: 10,
+              position: "absolute",
+              height: HEADER_HEIGHT,
+              transform: [{
+                translateY: Animated.add(scrollY, diffClampScrollY.interpolate({
+                  inputRange: [0, HEADER_HEIGHT, HEADER_HEIGHT + SCROLL_LOCK],
+                  outputRange: [0, -HEADER_HEIGHT, -HEADER_HEIGHT],
+                  extrapolate: "clamp"
+                }))
+              }]
+            }}
+            className='w-full bg-[#0F0F0F]'
+          >
+          </Animated.View>)
+          }
           renderItem={(item) => {
             return (
-              <PostItem
-                pfpUrl={item.item.userPfp}
-                attachmentUrl={item.item.attachmentUrl}
-                username={item.item.username}
-                challengeDesc={item.item.challengeDesc}
-                description={item.item.text}
-                datePosted={item.item.datePosted}
-              >
-              </PostItem>
+              <View style={{ zIndex: 0.5 }}>
+                <PostItem
+                  pfpUrl={item.item.userPfp}
+                  attachmentUrl={item.item.attachmentUrl}
+                  username={item.item.username}
+                  challengeDesc={item.item.challengeDesc}
+                  description={item.item.text}
+                  datePosted={item.item.datePosted}
+                >
+                </PostItem>
+              </View>
             )
           }}
 

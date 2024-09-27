@@ -32,7 +32,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <HomeIcon color={color} />,
+            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
           }}
         />
         <Tabs.Screen
@@ -40,7 +40,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <ChallengeIcon color={color} />,
+            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
             headerStyle: { backgroundColor: "#2c2c2c" }
           }}
         />
@@ -49,7 +49,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <SearchIcon color={color} />,
+            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
           }}
         />
         <Tabs.Screen
@@ -57,7 +57,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <Feather name="inbox" size={30} color={color} />,
+            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
           }}
         />
         <Tabs.Screen

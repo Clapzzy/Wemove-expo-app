@@ -26,7 +26,6 @@ export default function SignIn() {
     if (emailRegex.test(pass)) {
       formData.editRegisterInfo({ ...formData.data, password: pass })
       router.push('/(profile-maker)/birthdayPage')
-      console.log(formData.data)
     } else {
       setBadPass(true)
     }

@@ -4,11 +4,10 @@ import { router } from 'expo-router'
 
 export default function PostItem(props) {
   const { pfpUrl, attachmentUrl, username, description, challengeDesc, datePosted } = props
-  console.log(pfpUrl)
 
 
   return (
-    <>
+    <View className=''>
       <Pressable className='px-3'>
         <Pressable className="flex-row mt-7" onPress={async () => {
           router.push(`/(main)/profile/${username}`)
@@ -41,6 +40,6 @@ export default function PostItem(props) {
         />
       </Pressable>
       <View className='w-full h-[1] bg-zinc-900 mt-8'></View>
-    </>
+    </View>
   )
 }

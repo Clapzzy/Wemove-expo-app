@@ -7,7 +7,10 @@ import { setTSpan } from "react-native-svg/lib/typescript/lib/extract/extractTex
 
 export default function Page() {
   const checkWhereToGo = async () => {
+    router.push('/(main)/challenges')
+    return
 
+    await AsyncStorage.setItem("username", "hello")
     const foundUsername = await AsyncStorage.getItem("username")
     if (!foundUsername) {
       router.push('/(profile-maker)/startPage')
