@@ -57,6 +57,8 @@ export default function postPreview() {
     }
     getUsername()
   }, [])
+  useEffect(() => {
+  })
 
   const cancelEdit = () => {
     setModalVisible(false)
@@ -109,6 +111,12 @@ export default function postPreview() {
     },
   })
 
+  if (queryProfile.status == "success") {
+    if (typeof queryProfile.data.UserRank == typeof 0) {
+      queryProfile.data.UserRank = addTh(queryProfile.data.UserRank)
+    }
+    console.log(queryProfile.data.doneChallenges[queryProfile.data.doneChallenges.length - 1].datePosted)
+  }
   const pickPfp = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -136,6 +144,20 @@ export default function postPreview() {
       setBgPic(result.assets[0].uri)
       setBgPicBase64(result.assets[0].base64)
       setIsDefaultBg(true)
+    }
+  }
+
+  function addTh(num) {
+    switch (num) {
+      case 1:
+        return "1st"
+        break
+      case 2:
+        return "2nd"
+      case 3:
+        return "3rd"
+      default:
+        return `${num}th`
     }
   }
 
@@ -274,7 +296,7 @@ export default function postPreview() {
         }}
       >
         <CustomText text={queryProfile.data?.displayName} type="SemiBold" className=" relative top-1 text-18 color-[#E4FF66]" />
-        <CustomText text="100 challenges" type="Regular" className="color-[#E4FF66]" />
+        <CustomText text={queryProfile.data.doneChallenges.length + " challenges"} type="Regular" className="color-[#E4FF66]" />
       </Animated.View>
       {queryProfile.data?.backgroundName == "Default"
         ? (<Animated.View
@@ -408,7 +430,7 @@ export default function postPreview() {
                     </View>
                     <View className='h-full w-0.5 rounded-full bg-zinc-700'></View>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text="0" type="ExtraBold" className="color-gray-100 text-15" />
+                      <CustomText text={queryProfile.data.doneChallenges.length} type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
                         <CustomText text="Challanges" type="Regular" className="color-gray-200 text-15" />
                         <CustomText text="Completed" type="Regular" className="color-gray-200 text-15" />
@@ -416,7 +438,7 @@ export default function postPreview() {
                     </View>
                     <View className='h-full w-0.5 rounded-full bg-zinc-700'></View>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text="1st" type="ExtraBold" className="color-gray-100 text-15" />
+                      <CustomText text={queryProfile.data.UserRank} type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
                         <CustomText text="in" type="Regular" className="color-gray-200 text-15" />
                         <CustomText text="Bulgaria" type="Regular" className="color-gray-200 text-15" />

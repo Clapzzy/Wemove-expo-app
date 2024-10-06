@@ -13,7 +13,7 @@ export default function PostItem(props) {
           router.push(`/(main)/profile/${username}`)
         }}>
           <Image
-            className='rounded-full h-11 w-11 '
+            className='rounded-full h-12 w-12 '
             source={pfpUrl == "" || pfpUrl == undefined ? require('../../assets/pfp2.png') : { uri: pfpUrl }}
           />
           <View className="flex-col gap-[4] ml-2">

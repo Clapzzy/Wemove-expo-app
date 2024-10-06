@@ -1,14 +1,9 @@
 import React from 'react';
-import Feather from '@expo/vector-icons/Feather';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-import ChallengeIcon from '@/components/icons/challengesIcon';
-import GroupIcon from '@/components/icons/groupIcon';
-import HomeIcon from '@/components/icons/homeIcon';
-import SearchIcon from '@/components/icons/searchIcon';
-import CogIcon from '@/components/icons/cogIcon';
+import { Foundation, Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { View } from 'react-native';
 import { MainProvider } from '@/helper/mainScreensContext';
+import { collectManifestSchemes } from 'expo-linking';
 
 export default function TabLayout() {
   return (
@@ -32,7 +27,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
+            tabBarIcon: ({ color }) => <Foundation name='home' size={34} color={color} />,
           }}
         />
         <Tabs.Screen
@@ -40,7 +35,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
+            tabBarIcon: ({ color }) => <Feather name="target" size={32} color={color} />,
             headerStyle: { backgroundColor: "#2c2c2c" }
           }}
         />
@@ -49,7 +44,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
+            tabBarIcon: ({ color }) => <Ionicons name="search" size={34} color={color} />,
           }}
         />
         <Tabs.Screen
@@ -57,7 +52,7 @@ export default function TabLayout() {
           options={{
             tabBarShowLabel: false,
             headerShown: false,
-            tabBarIcon: ({ color }) => <View className="w-6 h-7 bg-white" />,
+            tabBarIcon: ({ color }) => <Feather name="inbox" size={34} color={color} />,
           }}
         />
         <Tabs.Screen
