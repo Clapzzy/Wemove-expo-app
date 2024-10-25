@@ -87,6 +87,7 @@ export default function Challenges() {
         style={{ paddingTop: insets.top, width: "100%" }}
         showsVerticalScrollIndicator={false}
       >
+        {/*
         <View className="w-full justify-between flex-row mx-4">
           <Pressable onPress={async () => {
             const username = await AsyncStorage.getItem("username")
@@ -98,6 +99,7 @@ export default function Challenges() {
             />
           </Pressable>
         </View>
+      */}
         {queryChallenges.data.dailyChallenges[0].completed && queryChallenges.data.dailyChallenges[1].completed && queryChallenges.data.weeklyChallenges[0].completed
           ? (
             <View className="px-6"  >
@@ -111,7 +113,7 @@ export default function Challenges() {
           )
           : false
         }
-        {!queryChallenges.data.dailyChallenges[0].completed && !queryChallenges.data.dailyChallenges[1].completed
+        {!queryChallenges.data.dailyChallenges[0].completed || !queryChallenges.data.dailyChallenges[1].completed
           ? (<CustomItalicText text="Ежедневни" type="ExtraBold" className=" pt-8 pl-8 text-30 text-[#e5e5e5]" />)
           : false}
         {queryChallenges.data.dailyChallenges.map((item, index) => {

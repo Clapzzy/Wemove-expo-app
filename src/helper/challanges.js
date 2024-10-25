@@ -28,6 +28,24 @@ export const fetchPosts = async ({ lastId }) => {
   }
 }
 
+//nqma da e zle ako vsichki api funci gi gropiram
+
+export const fetchSinglePost = async (username, _id) => {
+  try {
+    const response = await axios.get("http://3.77.19.140:3000/posts/single", {
+      params: {
+        username,
+        _id
+      }
+    })
+
+    return response.data
+
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 export const fetchUserSpecificPosts = async ({ lastId, username }) => {
   try {
     const response = await axios.get("http://3.77.19.140:3000/posts/user", {

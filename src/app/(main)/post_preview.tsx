@@ -34,9 +34,11 @@ export default function postPreview() {
       queryClient.invalidateQueries({
         queryKey: ["posts", "home"]
       })
+      setIsDisabled(false)
       router.push("/(main)/home")
     },
     onSettled(data, error, variables, context) {
+      setIsDisabled(false)
       console.log(error,)
     },
   })
@@ -54,6 +56,7 @@ export default function postPreview() {
   }
 
   const sendPost = async () => {
+    console.log(image)
     postMutation.mutate({ description, image })
     console.log("post")
   }

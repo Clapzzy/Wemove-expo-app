@@ -15,7 +15,7 @@ export default function Page() {
     if (!foundUsername) {
       router.push('/(profile-maker)/startPage')
     } else {
-      router.push('/(main)/challenges')
+      router.push('/(main)/[user]/hello')
     }
     //router.push('/(profile-maker)/termsPage')
   }

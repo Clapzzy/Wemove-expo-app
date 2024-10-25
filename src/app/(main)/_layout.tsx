@@ -78,6 +78,17 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name="singlePost"
+          options={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              display: 'none'
+            },
+            href: null,
+          }}
+        />
+        <Tabs.Screen
           name="profile/[user]"
           options={{
             headerShown: false,

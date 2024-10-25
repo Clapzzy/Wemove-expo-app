@@ -25,11 +25,11 @@ const AnimatedBlurView = Animated.createAnimatedComponent(
   BlurView
 )
 
-export default function postPreview() {
+export default function postPreview({ route }) {
   const queryClient = useQueryClient()
   const insets = useSafeAreaInsets()
   const urlParams = useLocalSearchParams()
-
+  console.log(urlParams)
   const [username, setUsername] = useState('')
 
   const [isDefaultPfp, setIsDefaultPfp] = useState(false)
@@ -115,7 +115,6 @@ export default function postPreview() {
     if (typeof queryProfile.data.UserRank == typeof 0) {
       queryProfile.data.UserRank = addTh(queryProfile.data.UserRank)
     }
-    console.log(queryProfile.data.doneChallenges[queryProfile.data.doneChallenges.length - 1].datePosted)
   }
   const pickPfp = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -237,10 +236,10 @@ export default function postPreview() {
       <TouchableOpacity
         style={{
           zIndex: 10,
-          top: insets.top - 4,
+          marginTop: insets.top - 4,
           elevation: 2
         }}
-        hitSlop={{ top: 40, bottom: 40, right: 40, left: 40 }}
+        hitSlop={{ top: insets.top - 4, bottom: insets.top - 4, right: 40, left: 40 }}
         className='absolute left-4 w-[38] h-[38] bg-[#13131080] justify-center rounded-full'
         onPress={() => { router.back() }}
       >
@@ -257,6 +256,7 @@ export default function postPreview() {
           opacity: scrollY.interpolate({
             inputRange: [-20, 0],
             outputRange: [1, 0],
+            extrapolate: "clamp"
           }),
           transform: [
             {
@@ -341,6 +341,7 @@ export default function postPreview() {
               opacity: scrollY.interpolate({
                 inputRange: [-50, 0, 50, 120],
                 outputRange: [1, 0, 0, 1],
+                extrapolate: "clamp"
               })
             }}
           ></AnimatedBlurView>
@@ -422,7 +423,7 @@ export default function postPreview() {
                   </View>
                   <View className='mt-5 flex-row justify-between'>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text="0" type="ExtraBold" className="color-gray-100 text-15" />
+                      <CustomText text={queryProfile.data.dailyStreak} type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
                         <CustomText text="Day" type="Regular" className="color-gray-200 text-15" />
                         <CustomText text="Streak" type="Regular" className="color-gray-200 text-15" />
@@ -478,7 +479,7 @@ export default function postPreview() {
               useNativeDriver: true
             })
         }
-        onViewableItemsChanged={({ viewableItems, changed }) => {
+        onViewableItemChanged={({ viewableItems, changed }) => {
           const lastVisableItem = viewableItems[viewableItems.length - 1]
 
           if (lastVisableItem) {

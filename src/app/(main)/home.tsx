@@ -6,6 +6,7 @@ import { fetchPosts } from "../../helper/challanges"
 import CustomText from "@/components/customText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
+import { useScrollToTop } from '@react-navigation/native';
 import MainContext from "@/helper/mainScreensContext";
 import PostItem from "@/components/postItem";
 
@@ -30,30 +31,39 @@ export default function Home() {
     }
   })
 
+  const queryChallenges = useQuery({
+    queryKey: ['image'],
+    queryFn: () => getImage()
+  })
+
   const [image, changeImage] = useState(null)
+  const scrollRef = useRef(null)
+
   const myData = useContext(MainContext)
   const insets = useSafeAreaInsets()
+
   const HEADER_HEIGHT = insets.top + 50
   const SCROLL_THRESHOLD = 300
   const SCROLL_LOCK = 100
   const scrollY = useRef(new Animated.Value(0)).current
   const diffClampScrollY = useRef(Animated.diffClamp(scrollY, 0, HEADER_HEIGHT + SCROLL_THRESHOLD + SCROLL_LOCK)).current
 
-  const getImage = async () => {
-    const pic = await AsyncStorage.getItem("tempPic")
-    changeImage(pic)
-    return pic
-  }
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => scrollRef.current?.scrollTo({ y: 100 }),
+    })
+  );
 
   const viewabilityConfig = useRef({
     viewAreaCoveragePercentThreshold: 20,
     waitForInteraction: false,
   })
 
-  const queryChallenges = useQuery({
-    queryKey: ['image'],
-    queryFn: () => getImage()
-  })
+  const getImage = async () => {
+    const pic = await AsyncStorage.getItem("tempPic")
+    changeImage(pic)
+    return pic
+  }
 
   if (queryChallenges.isLoading) {
     return (
@@ -67,6 +77,7 @@ export default function Home() {
 
     )
   }
+
   if (queryChallenges.isError) {
     return (
       <View className="items-center bg-[#262626] flex-1 color-white">
@@ -79,13 +90,6 @@ export default function Home() {
 
     )
   }
-  {/*
-
-              inputRange: [0, HEADER_HEIGHT, HEADER_HEIGHT + SCROLL_LOCK],
-              outputRange: [0, -HEADER_HEIGHT, -HEADER_HEIGHT],
-*/}
-
-
 
   return (
     <View className="items-center bg-[#060605] flex-[1] color-white">
@@ -108,6 +112,7 @@ export default function Home() {
       </Animated.View>
       <View className=" flex-[1] w-full  flex-col">
         <Animated.FlatList
+          ref={scrollRef}
           className="w-full"
           style={{
             zIndex: 1
@@ -149,6 +154,7 @@ export default function Home() {
             return (
               <View style={{ zIndex: 10.5 }}>
                 <PostItem
+                  _id={item.item._id}
                   pfpUrl={item.item.userPfp}
                   attachmentUrl={item.item.attachmentUrl}
                   username={item.item.username}
