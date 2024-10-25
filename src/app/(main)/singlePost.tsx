@@ -40,6 +40,7 @@ export default function SinglePost() {
   return (
     <TouchableWithoutFeedback className='flex-[1]' onPress={removeKeyboard}>
       <View style={{ paddingTop: insets.top }} className="bg-[#060605] flex-[1]">
+        {/* On top of flatlist the header that is just like the one of a normal post and on bottom a footer that is the comment function(both need to have their position absolute). In the flatlist header there needs to be a post but without the thing that showls who made it and in the renderItem are the comments. Need to make a custom reusable component for the comments and make and add animation for liking. Also when going back it wont be bad to pass context like if i had liked the post when inside of singlePost.*/}
         <FlatList
           ref={scrollRef}
           className="w-full"
