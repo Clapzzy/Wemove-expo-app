@@ -10,7 +10,7 @@ export default function PostItem(props) {
   return (
     <View className='bg-[#060605]'>
       <Pressable className='px-2' onPress={() => {
-        router.navigate(`/(main)/singlePost?pfpUrl=${encodeURIComponent(pfpUrl)}&description=${encodeURIComponent(description)}&challengeDesc=${encodeURIComponent(challengeDesc)}&attachmentUrl=${encodeURIComponent(attachmentUrl)}&datePosted=${encodeURIComponent(datePosted)}&id=${encodeURIComponent(_id)}`)
+        router.navigate(`/(main)/singlePost?pfpUrl=${encodeURIComponent(pfpUrl)}&username=${encodeURIComponent(username)}&description=${encodeURIComponent(description)}&challengeDesc=${encodeURIComponent(challengeDesc)}&attachmentUrl=${encodeURIComponent(attachmentUrl)}&datePosted=${encodeURIComponent(datePosted)}&${encodeURIComponent("_id")}=${encodeURIComponent(_id)}`)
       }}>
         <Pressable className="flex-row mt-7" onPress={async () => {
           router.navigate(`/(main)/profile/${encodeURIComponent(username)}`)

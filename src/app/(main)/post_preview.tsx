@@ -1,5 +1,5 @@
 import { useCallback, useContext, useRef, useState } from 'react';
-import { TouchableOpacity, ImageBackground, Pressable, TextInput, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { Platform, TouchableOpacity, ImageBackground, Pressable, TextInput, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import MainContext from '@/helper/mainScreensContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons/';
@@ -108,7 +108,10 @@ export default function postPreview() {
               </TouchableOpacity>
               <CustomText text=''></CustomText>
             </View>
-            <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset='12' className='flex-[1] flex-row justify-between items-end'>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={12}
+              className='flex-[1] flex-row justify-between items-end'>
               <TextInput
                 ref={textField}
                 onChangeText={onChangeDesc}

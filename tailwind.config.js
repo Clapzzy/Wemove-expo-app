@@ -7,6 +7,8 @@ module.exports = {
       sans: ['Montserrat', 'sans-serif'],
     },
     fontSize: {
+      10: 10,
+      11: 11,
       12: 12,
       14: 14,
       15: 15,

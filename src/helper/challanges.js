@@ -39,9 +39,11 @@ export const fetchSinglePost = async (username, _id) => {
       }
     })
 
+    console.log(response.data)
     return response.data
 
   } catch (error) {
+    console.log(error)
     return Promise.reject(error)
   }
 }
