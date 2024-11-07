@@ -9,14 +9,22 @@ import SearchItem from "@/components/searchItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { addComment, fetchSinglePost } from "@/helper/challanges";
+import Animated, { useSharedValue } from "react-native-reanimated";
+
+const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign)
 
 export default function SinglePost() {
   const [comment, setComment] = useState("")
   const [dataComments, setDataComments] = useState({})
+
   const commentRef = useRef(null)
+  const scrollRef = useRef(null)
+
   const insets = useSafeAreaInsets()
   const queryParams = useLocalSearchParams()
-  const scrollRef = useRef(null)
+
+  const likeTransformX = useSharedValue(0)
+  const likeRotation = useSharedValue(0)
 
   const commentMutation = useMutation({
     mutationFn: addComment,
@@ -154,7 +162,7 @@ export default function SinglePost() {
                   />
                   <View className='flex-row w-full px-24 mb-2 mt-6 justify-between'>
                     <Pressable>
-                      <AntDesign name="like2" size={32} color="#c4c4c4" />
+                      <AnimatedAntDesign name="like2" size={32} color="#c4c4c4" />
                     </Pressable>
                     <Pressable onPress={() => {
                       commentRef.current?.focus()
