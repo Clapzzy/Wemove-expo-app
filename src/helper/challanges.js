@@ -15,6 +15,22 @@ export const fetchChallenges = async () => {
     throw new Error(error)
   }
 };
+
+export const addComment = async ({ posterUsername, username, message, _id }) => {
+  try {
+    const response = await axios.post("http://3.77.19.140:3000/posts/comments", {
+      postMessage: message,
+      posterUsername: posterUsername,
+      username: username,
+      _id: _id
+    })
+
+    return response.data
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 export const fetchPosts = async ({ lastId }) => {
   try {
     const response = await axios.get("http://3.77.19.140:3000/posts/", {
@@ -39,7 +55,6 @@ export const fetchSinglePost = async (username, _id) => {
       }
     })
 
-    console.log(response.data)
     return response.data
 
   } catch (error) {
