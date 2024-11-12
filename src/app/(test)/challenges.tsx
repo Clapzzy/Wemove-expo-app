@@ -11,6 +11,8 @@ import NormalButton from "../../components/normalButton"
 import CustomItalicText from "@/components/customItalicText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchCurrentUserProfile, fetchProfile } from "@/helper/fetchUserProfile";
+import SkeletonExpo from "moti/build/skeleton/expo";
+import { Skeleton } from "moti/skeleton";
 
 export default function Challenges() {
 
@@ -108,9 +110,13 @@ export default function Challenges() {
           )
           : false
         }
-        {!queryChallenges.data.dailyChallenges[0].completed && !queryChallenges.data.dailyChallenges[1].completed
-          ? (<CustomItalicText text="Ежедневни" type="ExtraBold" className=" pt-8 pl-8 text-30 text-[#e5e5e5]" />)
-          : false}
+        <Skeleton show={true} width={200} height={40} colorMode="light">
+          {!queryChallenges.data.dailyChallenges[0].completed && !queryChallenges.data.dailyChallenges[1].completed
+            ? (
+              <CustomItalicText text="Ежедневни" type="ExtraBold" className=" pt-8 pl-8 text-30 text-[#e5e5e5]" />
+            )
+            : <></>}
+        </Skeleton>
         {queryChallenges.data.dailyChallenges.map((item, index) => {
           if (item.completed == true) {
             return
@@ -123,7 +129,7 @@ export default function Challenges() {
               <CustomText text={title} type="Medium" className="text-16 text-[#E5E5E5] pb-2" />
               <View className="mt-5 mb-[8] w-full content-between flex-row place-content-between justify-between">
                 <NormalButton text="Смени" textColor="#737373" style={{ borderColor: "#2c2c2c", borderWidth: 1.5 }} />
-                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#D9F99D" style={{ borderColor: "#D9F99D", borderWidth: 1.5 }} />
+                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#E4FF66" style={{ borderColor: "#E4FF66", borderWidth: 1.5 }} />
               </View>
             </View>
           )
@@ -143,7 +149,7 @@ export default function Challenges() {
               <CustomText text={title} type="Medium" className="text-16 text-[#E5E5E5] pb-2" />
               <View className="mt-5 mb-[8] w-full content-between flex-row place-content-between justify-between">
                 <NormalButton text="Смени" textColor="#737373" style={{ borderColor: "#2c2c2c", borderWidth: 1.5 }} />
-                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#D9F99D" style={{ borderColor: "#D9F99D", borderWidth: 1.5 }} />
+                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#E4FF66" style={{ borderColor: "#E4FF66", borderWidth: 1.5 }} />
               </View>
             </View>
           )
@@ -154,14 +160,3 @@ export default function Challenges() {
 
 
 }
-/*
-  <View>
-   {camera ?  (
-   <View className=" flex-1 justify-center">
-    <CameraView className="flex-1">
-    </CameraView>
-   </View>
-   ): <Text>No</Text>}
-  </View>
- 
-*/

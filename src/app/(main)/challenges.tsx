@@ -11,15 +11,13 @@ import NormalButton from "../../components/normalButton"
 import CustomItalicText from "@/components/customItalicText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchCurrentUserProfile, fetchProfile } from "@/helper/fetchUserProfile";
+import SkeletonExpo from "moti/build/skeleton/expo";
+import { Skeleton } from "moti/skeleton";
 
 export default function Challenges() {
 
   const insets = useSafeAreaInsets()
   const queryClient = useQueryClient()
-  const [camera, setCamera] = useState(false)
-  const [permission, requestPermision] = useCameraPermissions()
-  const [renderHelper, setRenderHelper] = useState(false)
-  const [username, setUsername] = useState("")
 
 
   const queryChallenges = useQuery({
@@ -27,20 +25,11 @@ export default function Challenges() {
     queryFn: () => fetchChallenges()
   })
 
-  const queryProfile = useQuery({
-    queryKey: ["profile"],
-    queryFn: () => {
-      return fetchCurrentUserProfile()
-    }
-  })
-
   useFocusEffect(
     useCallback(() => {
       queryClient.invalidateQueries({ queryKey: ['challenges'] })
     }, [])
   )
-  const hello = useEffect(() => {
-  }, [renderHelper])
 
   const completeChallenge = async (challengeId, challengeDesc) => {
     await AsyncStorage.setItem("challengeId", challengeId)
@@ -53,14 +42,32 @@ export default function Challenges() {
 
   if (queryChallenges.isLoading) {
     return (
-      <View className="items-center bg-[#262626] flex-1 color-white">
-        <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
-          <SafeAreaView>
-            <CustomText text="Loading ..." type="Bold" className=" text-30 text-gray-500" />
-          </SafeAreaView>
-        </ImageBackground >
-      </View >
+      <View className={`bg-[#060605] flex-1 color-white `} style={{ paddingTop: insets.top }}>
+        <View className=" pt-8 pl-8 ">
+          <SkeletonExpo show width={200} height={35} colorMode="dark" backgroundColor="#131310">
+          </SkeletonExpo>
+        </View>
 
+        <View className='w-fit mt-4 px-4  '>
+          <SkeletonExpo show width={'100%'} height={170} colorMode="dark" backgroundColor="#131310">
+          </SkeletonExpo>
+        </View>
+
+        <View className='w-fit mt-4 px-4  '>
+          <SkeletonExpo show width={'100%'} height={170} colorMode="dark" backgroundColor="#131310">
+          </SkeletonExpo>
+        </View>
+
+        <View className=" pt-8 pl-8 mb-1">
+          <SkeletonExpo show width={200} height={35} colorMode="dark" backgroundColor="#131310">
+          </SkeletonExpo>
+        </View>
+
+        <View className='w-fit mt-4 px-4  '>
+          <SkeletonExpo show width={'100%'} height={170} colorMode="dark" backgroundColor="#131310">
+          </SkeletonExpo>
+        </View>
+      </View >
     )
   }
 
@@ -88,6 +95,15 @@ export default function Challenges() {
         showsVerticalScrollIndicator={false}
       >
         {/*
+        <View className='m-2 w-fit p-4 rounded-[10] bg-[#0e0e0c] opacity-70 '>
+          <CustomText text="Predizvikatelsvo 1" type="Bold" className="text-22 text-[#bfe500] mb-2" />
+          <CustomText text="lorem impsum sit amet, consectetu radipiscing ilit . Nam virae" type="Medium" className="text-16 text-[#E5E5E5] pb-2" />
+          <View className="mt-5 mb-[8] w-full content-between flex-row place-content-between justify-between">
+            <NormalButton text="Смени" textColor="#737373" style={{ borderColor: "#2c2c2c", borderWidth: 1.5 }} />
+            <NormalButton text="Виж повече" textColor="#1A2E05" backgroundColorButton="#E4FF66" style={{ borderColor: "#E4FF66", borderWidth: 1.5 }} />
+          </View>
+        </View>
+
         <View className="w-full justify-between flex-row mx-4">
           <Pressable onPress={async () => {
             const username = await AsyncStorage.getItem("username")
@@ -128,7 +144,7 @@ export default function Challenges() {
               <CustomText text={title} type="Medium" className="text-16 text-[#E5E5E5] pb-2" />
               <View className="mt-5 mb-[8] w-full content-between flex-row place-content-between justify-between">
                 <NormalButton text="Смени" textColor="#737373" style={{ borderColor: "#2c2c2c", borderWidth: 1.5 }} />
-                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#D9F99D" style={{ borderColor: "#D9F99D", borderWidth: 1.5 }} />
+                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#E4FF66" style={{ borderColor: "#E4FF66", borderWidth: 1.5 }} />
               </View>
             </View>
           )
@@ -148,7 +164,7 @@ export default function Challenges() {
               <CustomText text={title} type="Medium" className="text-16 text-[#E5E5E5] pb-2" />
               <View className="mt-5 mb-[8] w-full content-between flex-row place-content-between justify-between">
                 <NormalButton text="Смени" textColor="#737373" style={{ borderColor: "#2c2c2c", borderWidth: 1.5 }} />
-                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#D9F99D" style={{ borderColor: "#D9F99D", borderWidth: 1.5 }} />
+                <NormalButton onPress={completeChallenge.bind(this, item.challengeId, item.description)} text="Виж повече" textColor="#1A2E05" backgroundColorButton="#E4FF66" style={{ borderColor: "#E4FF66", borderWidth: 1.5 }} />
               </View>
             </View>
           )
@@ -160,14 +176,3 @@ export default function Challenges() {
 
 
 }
-/*
-  <View>
-   {camera ?  (
-   <View className=" flex-1 justify-center">
-    <CameraView className="flex-1">
-    </CameraView>
-   </View>
-   ): <Text>No</Text>}
-  </View>
- 
-*/

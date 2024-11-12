@@ -7,6 +7,7 @@ import CustomText from "@/components/customText";
 import { fetchUsers } from "@/helper/fetchUsers";
 import SearchItem from "@/components/searchItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SkeletonExpo from "moti/build/skeleton/expo";
 
 //interface userItem {
 //  _id: string,
@@ -54,16 +55,18 @@ export default function Search() {
           <CustomText text="Search" type="ExtraBold" className="text-[#BFE500] text-32" />
           <View className="flex-row items-center bg-[#131311] opacity-70 text-20 text-[#A3A3A3] h-10 mt-6 rounded-lg  pl-3" >
             <MaterialIcons name="search" size={20} color="#A3A3A3" className="relative " />
-            <TextInput
-              className="bg-[#131311] flex-[1] text-20 text-[#666666] h-10 rounded-lg pl-2"
-              style={{ fontFamily: 'Regular' }}
-              onChangeText={setSearch}
-              textInp
-              placeholder="Search"
-              placeholderTextColor="#666666"
-              value={search}
-            >
-            </TextInput>
+            <SkeletonExpo show width={200} height={40} colorMode="dark">
+              <TextInput
+                className="bg-[#131311] flex-[1] text-20 text-[#666666] h-10 rounded-lg pl-2"
+                style={{ fontFamily: 'Regular' }}
+                onChangeText={setSearch}
+                textInp
+                placeholder="Search"
+                placeholderTextColor="#666666"
+                value={search}
+              >
+              </TextInput>
+            </SkeletonExpo>
           </View>
           <FlatList
             className="mb-64 w-full"

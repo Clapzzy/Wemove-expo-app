@@ -17,7 +17,6 @@ export default function TermsPage() {
   const formData = useContext(RegisterContext)
   const [isChecked, setChecked] = useState(false)
 
-  console.log(formData)
   const profileMutation = useMutation({
     mutationFn: makeProfile,
     onSuccess: async (data, variables, context) => {

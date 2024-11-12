@@ -42,11 +42,6 @@ export default function Home() {
   const myData = useContext(MainContext)
   const insets = useSafeAreaInsets()
 
-  const HEADER_HEIGHT = insets.top + 50
-  const SCROLL_THRESHOLD = 300
-  const SCROLL_LOCK = 100
-  const scrollY = useRef(new Animated.Value(0)).current
-  const diffClampScrollY = useRef(Animated.diffClamp(scrollY, 0, HEADER_HEIGHT + SCROLL_THRESHOLD + SCROLL_LOCK)).current
 
   useScrollToTop(
     React.useRef({
@@ -55,7 +50,7 @@ export default function Home() {
   );
 
   const viewabilityConfig = useRef({
-    viewAreaCoveragePercentThreshold: 20,
+    viewAreaCoveragePercentThreshold: 60,
     waitForInteraction: false,
   })
 
@@ -93,23 +88,6 @@ export default function Home() {
 
   return (
     <View className="items-center bg-[#060605] flex-[1] color-white">
-      <Animated.View
-        style={{
-          position: "absolute",
-          zIndex: 10,
-          height: HEADER_HEIGHT,
-          transform: [{
-            translateY: diffClampScrollY.interpolate({
-              inputRange: [0, HEADER_HEIGHT, HEADER_HEIGHT + SCROLL_LOCK],
-              outputRange: [0, -HEADER_HEIGHT, -HEADER_HEIGHT],
-              extrapolateRight: "clamp"
-            })
-
-          }]
-        }}
-        className='w-full bg-[#0F0F0F]'
-      >
-      </Animated.View>
       <View className=" flex-[1] w-full  flex-col">
         <Animated.FlatList
           ref={scrollRef}
@@ -122,23 +100,15 @@ export default function Home() {
             return item._id
           }}
           showsVerticalScrollIndicator={false}
-          onScroll={Animated.event([
-            {
-              nativeEvent: {
-                contentOffset: { y: scrollY }
-              }
-            }
-          ],
-            {
-              useNativeDriver: true
-            })}
+          windowSize={7}
+          maxToRenderPerBatch={5}
+          removeClippedSubviews={true}
+          viewabilityConfig={viewabilityConfig.current}
           onViewableItemsChanged={({ viewableItems, changed }) => {
-            console.log("scroll")
             const lastVisableItem = viewableItems[viewableItems.length - 1]
 
             if (lastVisableItem) {
               const { index } = lastVisableItem
-              console.log(index)
               if (index >= data.pages.flat().length - 3) {
                 const lastPage = data?.pages[data?.pages.length - 1]
                 if (lastPage == 0 && lastPage < data?.pages[data?.pages.length - 2]) {
@@ -149,7 +119,6 @@ export default function Home() {
               }
             }
           }}
-          viewabilityConfig={viewabilityConfig.current}
           renderItem={(item) => {
             return (
               <View style={{ zIndex: 10.5 }}>
@@ -166,9 +135,45 @@ export default function Home() {
               </View>
             )
           }}
-
+          ListHeaderComponent={() => (
+            <View style={{ marginTop: insets.top }}>
+            </View>
+          )}
         />
       </View>
     </View >
   );
 }
+/*
+  const HEADER_HEIGHT = insets.top + 50
+  const SCROLL_THRESHOLD = 300
+  const SCROLL_LOCK = 100
+  const scrollY = useRef(new Animated.Value(0)).current
+  const diffClampScrollY = useRef(Animated.diffClamp(scrollY, 0, HEADER_HEIGHT + SCROLL_THRESHOLD + SCROLL_LOCK)).current
+          onScroll={Animated.event([
+            {
+              nativeEvent: {
+                contentOffset: { y: scrollY }
+              }
+            }
+          ],
+            {
+              useNativeDriver: true
+            })}
+      <Animated.View
+        style={{
+          position: "absolute",
+          zIndex: 10,
+          height: HEADER_HEIGHT,
+          transform: [{
+            translateY: diffClampScrollY.interpolate({
+              inputRange: [0, HEADER_HEIGHT, HEADER_HEIGHT + SCROLL_LOCK],
+              outputRange: [0, -HEADER_HEIGHT, -HEADER_HEIGHT],
+              extrapolateRight: "clamp"
+            })
+
+          }]
+        }}
+        className='w-full bg-[#0F0F0F]'
+      >
+ * */

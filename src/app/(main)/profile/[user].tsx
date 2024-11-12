@@ -29,11 +29,12 @@ export default function postPreview({ route }) {
   const queryClient = useQueryClient()
   const insets = useSafeAreaInsets()
   const urlParams = useLocalSearchParams()
-  console.log(urlParams)
+
   const [username, setUsername] = useState('')
 
   const [isDefaultPfp, setIsDefaultPfp] = useState(false)
   const [isDefaultBg, setIsDefaultBg] = useState(false)
+  const [isHeaderMounted, setIsHeaderMounted] = useState(false);
 
   const [pfp, setPfp] = useState<string | null>(null)
   const [pfpBase64, setPfpBase64] = useState<string | null>(null)
@@ -296,7 +297,7 @@ export default function postPreview({ route }) {
         }}
       >
         <CustomText text={queryProfile.data?.displayName} type="SemiBold" className=" relative top-1 text-18 color-[#E4FF66]" />
-        <CustomText text={queryProfile.data.doneChallenges.length + " challenges"} type="Regular" className="color-[#E4FF66]" />
+        <CustomText text={queryProfile.data?.doneChallenges.length + " challenges"} type="Regular" className="color-[#E4FF66]" />
       </Animated.View>
       {queryProfile.data?.backgroundName == "Default"
         ? (<Animated.View
@@ -351,7 +352,10 @@ export default function postPreview({ route }) {
       <Animated.FlatList
         ListHeaderComponent={() => {
           return (
-            <View className="w-full bg-[#060604]" >
+            <View
+              className="w-full bg-[#060604]"
+              onLayout={() => setIsHeaderMounted(true)}
+            >
               <View className='flex-[1] px-4'>
                 <Animated.View
                   style={{
@@ -423,7 +427,7 @@ export default function postPreview({ route }) {
                   </View>
                   <View className='mt-5 flex-row justify-between'>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text={queryProfile.data.dailyStreak} type="ExtraBold" className="color-gray-100 text-15" />
+                      <CustomText text={queryProfile.data?.dailyStreak} type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
                         <CustomText text="Day" type="Regular" className="color-gray-200 text-15" />
                         <CustomText text="Streak" type="Regular" className="color-gray-200 text-15" />
@@ -431,7 +435,7 @@ export default function postPreview({ route }) {
                     </View>
                     <View className='h-full w-0.5 rounded-full bg-zinc-700'></View>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text={queryProfile.data.doneChallenges.length} type="ExtraBold" className="color-gray-100 text-15" />
+                      <CustomText text={queryProfile.data?.doneChallenges.length} type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
                         <CustomText text="Challanges" type="Regular" className="color-gray-200 text-15" />
                         <CustomText text="Completed" type="Regular" className="color-gray-200 text-15" />
@@ -439,7 +443,7 @@ export default function postPreview({ route }) {
                     </View>
                     <View className='h-full w-0.5 rounded-full bg-zinc-700'></View>
                     <View className='flex-col justify-between gap-2'>
-                      <CustomText text={queryProfile.data.UserRank} type="ExtraBold" className="color-gray-100 text-15" />
+                      <CustomText text={queryProfile.data?.UserRank} type="ExtraBold" className="color-gray-100 text-15" />
                       <View className='flew-row'>
                         <CustomText text="in" type="Regular" className="color-gray-200 text-15" />
                         <CustomText text="Bulgaria" type="Regular" className="color-gray-200 text-15" />
@@ -459,6 +463,7 @@ export default function postPreview({ route }) {
           marginTop: HEADER_HEIGHT_NARROWED,
           paddingTop: HEADER_HEIGHT_EXPANDED,
         }}
+        key={isHeaderMounted ? 'mounted' : 'initial'}
         scrollEventThrottle={16}
         data={data?.pages.flat()}
         keyExtractor={item => {
@@ -484,7 +489,7 @@ export default function postPreview({ route }) {
 
           if (lastVisableItem) {
             const { index } = lastVisableItem
-            if (index >= data.pages.flat().length - 3) {
+            if (index >= data?.pages.flat().length - 3) {
               const lastPage = data?.pages[data?.pages.length - 1]
               if (lastPage == 0 && lastPage < data?.pages[data?.pages.length - 2]) {
 

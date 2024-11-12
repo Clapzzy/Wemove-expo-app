@@ -1,30 +1,59 @@
-import { useInfiniteQuery, QueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, QueryClient, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { MaterialIcons, Feather, Ionicons, MaterialCommunityIcons, AntDesign, FontAwesome6 } from '@expo/vector-icons';
 import { Platform, Image, Text, View, KeyboardAvoidingView, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, ScrollView, FlatList } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { useEffect, useRef, useState, memo, useMemo } from "react";
+import { useEffect, useRef, useState, memo, useMemo, useCallback } from "react";
 import CustomText from "@/components/customText";
 import { fetchUsers } from "@/helper/fetchUsers";
-import SearchItem from "@/components/searchItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { addComment, fetchSinglePost } from "@/helper/challanges";
-import Animated, { useSharedValue } from "react-native-reanimated";
+import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withSequence, withTiming } from "react-native-reanimated";
+import SkeletonExpo from "moti/build/skeleton/expo";
 
 const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign)
+const AnimatedFontAwesome6 = Animated.createAnimatedComponent(FontAwesome6)
 
 export default function SinglePost() {
   const [comment, setComment] = useState("")
   const [dataComments, setDataComments] = useState({})
+  const [loaded, setLoaded] = useState(false)
 
   const commentRef = useRef(null)
   const scrollRef = useRef(null)
 
   const insets = useSafeAreaInsets()
   const queryParams = useLocalSearchParams()
+  const queryClient = useQueryClient()
 
-  const likeTransformX = useSharedValue(0)
-  const likeRotation = useSharedValue(0)
+  useFocusEffect(
+    useCallback(() => {
+      setLoaded(false)
+      setDataComments({})
+
+
+      queryClient.invalidateQueries({ queryKey: ['post', "single"] })
+      queryClient.invalidateQueries({ queryKey: ['comment'] })
+    }, [])
+  )
+
+  const likeAnimationValue = useSharedValue(0)
+
+  const likeAnimationStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: interpolate(likeAnimationValue.value, [0, 100], [0, -10]) },
+      { rotate: interpolate(likeAnimationValue.value, [0, 100], [0, -20]) + "deg" },
+      { scale: interpolate(likeAnimationValue.value, [0, 100], [1, 1.1]) }
+    ]
+  }))
+
+  const onLike = () => {
+    likeAnimationValue.value = withSequence(
+      withTiming(100, { easing: Easing.inOut(Easing.quad), duration: 200 }),
+      withTiming(0, { easing: Easing.inOut(Easing.quad), duration: 200 })
+    )
+  }
+
 
   const commentMutation = useMutation({
     mutationFn: addComment,
@@ -113,7 +142,7 @@ export default function SinglePost() {
           renderItem={(item) => {
             return (
               <Pressable>
-                <View className="flex-row px-4 gap-3 mt-6">
+                <Animated.View className="flex-row px-4 gap-3 mt-6">
                   <Image
                     className="w-10 h-10 rounded-full"
                     source={item.item.userPfp == "" || item.item.userPfp == undefined ? require('../../../assets/pfp2.png') : { uri: item.item.userPfp }}
@@ -130,7 +159,11 @@ export default function SinglePost() {
                       className="text-14 text-[#C4C4C4] mt-1"
                     ></CustomText>
                     <View className="flex-row mt-3 gap-2">
-                      <FontAwesome6 name="heart" size={16} color="#dc2626" />
+                      <Pressable >
+                        <Animated.View >
+                          <FontAwesome6 name="heart" size={16} color="#dc2626" />
+                        </Animated.View>
+                      </Pressable>
                       <CustomText
                         text={item.item.likes + " likes"}
                         type="Light"
@@ -138,31 +171,65 @@ export default function SinglePost() {
                       ></CustomText>
                     </View>
                   </View>
-                </View>
+                </Animated.View>
               </Pressable>
             )
           }}
           ListHeaderComponent={() => {
             return (
               <Pressable>
-                <View className="px-3">
-                  <CustomText
-                    text={queryParams.challengeDesc}
-                    type="SemiBold"
-                    className='text-white text-18 mt-4'
-                  ></CustomText>
-                  <CustomText
-                    text={queryParams.description}
-                    type="Regular"
-                    className="text-14 text-[#C4C4C4] mt-2"
-                  ></CustomText>
-                  <Image
-                    source={queryParams.attachmentUrl == "" || queryParams.attachmentUrl == undefined ? require('../../../assets/pfp2.png') : { uri: queryParams.attachmentUrl }}
-                    className='mt-7 w-full h-[265] rounded-xl'
-                  />
-                  <View className='flex-row w-full px-24 mb-2 mt-6 justify-between'>
-                    <Pressable>
-                      <AnimatedAntDesign name="like2" size={32} color="#c4c4c4" />
+
+                <SkeletonExpo.Group show={!loaded}>
+                  <View className='mt-5'>
+                    <CustomText
+                      style={loaded == false ? { display: 'none' } : {}}
+                      text={queryParams.challengeDesc}
+                      type="SemiBold"
+                      className='text-white text-18'
+                    ></CustomText>
+                    <View
+                      style={loaded == true ? { display: 'none' } : {}}
+                      className='gap-2'
+                    >
+                      <SkeletonExpo height={18} width={"100%"} colorMode='dark' radius={4}>
+                      </SkeletonExpo>
+                      <SkeletonExpo height={18} width={"100%"} colorMode='dark' radius={4}>
+                      </SkeletonExpo>
+                    </View>
+                  </View>
+                  <View className='mt-6'>
+                    <CustomText
+                      style={loaded == false ? { display: 'none' } : {}}
+                      text={queryParams.description}
+                      type="Regular"
+                      className="text-14 text-[#C4C4C4]"
+                    ></CustomText>
+                    <View
+                      style={loaded == true ? { display: 'none' } : {}}
+                    >
+                      <SkeletonExpo height={16} width={"80%"} colorMode='dark' radius={4}>
+                      </SkeletonExpo>
+                    </View>
+                  </View>
+                  <View className='mt-3'>
+                    <SkeletonExpo width={"100%"} height={265} colorMode='dark' radius={12}>
+                      <Image
+                        source={{ uri: queryParams.attachmentUrl }}
+                        className=' w-full h-[265] rounded-xl'
+                        style={{ width: "100%", height: 265, borderRadius: 12 }}
+                        onLoad={() => { setLoaded(true) }}
+                      />
+                    </SkeletonExpo>
+                  </View>
+                  <View
+                    style={loaded == true ? { display: 'none' } : {}}
+                    className='px-3 mt-6'>
+                    <SkeletonExpo height={16} width={"50%"} colorMode='dark' radius={4}>
+                    </SkeletonExpo>
+                  </View>
+                  <View style={loaded == false ? { display: 'none' } : {}} className='flex-row w-full px-24 mb-2 mt-6 justify-between'>
+                    <Pressable onPress={onLike}>
+                      <AnimatedAntDesign style={likeAnimationStyle} name="like2" size={32} color="#c4c4c4" />
                     </Pressable>
                     <Pressable onPress={() => {
                       commentRef.current?.focus()
@@ -171,19 +238,20 @@ export default function SinglePost() {
                     </Pressable>
                   </View>
                   <View className='w-full h-[1] bg-zinc-900 mt-8'></View>
-                </View>
-              </Pressable>
+
+                </SkeletonExpo.Group>
+
+              </Pressable >
             )
           }}
         />
       </>
     )
-  }, [dataComments, setDataComments, dataComments?.comments])
+  }, [dataComments, setDataComments, dataComments?.comments, queryParams])
 
   return (
     <TouchableWithoutFeedback className='flex-[1]' onPress={removeKeyboard}>
       <View style={{ paddingTop: insets.top }} className="bg-[#060605] flex-[1]">
-        {/* On top of flatlist the header that is just like the one of a normal post and on bottom a footer that is the comment function(both need to have their position absolute). In the flatlist header there needs to be a post but without the thing that showls who made it and in the renderItem are the comments. Need to make a custom reusable component for the comments and make and add animation for liking. Also when going back it wont be bad to pass context like if i had liked the post when inside of singlePost.*/}
         <View
           className="relative mb-2 bg-[#060605]"
         >
@@ -193,7 +261,9 @@ export default function SinglePost() {
             }}>
               <Ionicons name="close-outline" className="ml-1" size={36} color="#bfe500" />
             </Pressable>
-            <Pressable className="flex-row " >
+            <Pressable className="flex-row" onPress={async () => {
+              router.navigate(`/(main)/profile/${encodeURIComponent(queryParams.username)}`)
+            }}>
               <Image
                 className='rounded-full h-12 w-12'
                 source={queryParams.pfpUrl == "" || queryParams.pfpUrl == undefined ? require('../../../assets/pfp2.png') : { uri: queryParams.pfpUrl }}
@@ -215,3 +285,31 @@ export default function SinglePost() {
     </TouchableWithoutFeedback >
   );
 }
+/*
+ *<View className="px-3">
+                  <CustomText
+                    text={queryParams.challengeDesc}
+                    type="SemiBold"
+                    className='text-white text-18 mt-4'
+                  ></CustomText>
+                  <CustomText
+                    text={queryParams.description}
+                    type="Regular"
+                    className="text-14 text-[#C4C4C4] mt-2"
+                  ></CustomText>
+                  <Image
+                    source={queryParams.attachmentUrl == "" || queryParams.attachmentUrl == undefined ? require('../../../assets/pfp2.png') : { uri: queryParams.attachmentUrl }}
+                    className='mt-7 w-full h-[265] rounded-xl'
+                  />
+                  <View className='flex-row w-full px-24 mb-2 mt-6 justify-between'>
+                    <Pressable onPress={onLike}>
+                      <AnimatedAntDesign style={likeAnimationStyle} name="like2" size={32} color="#c4c4c4" />
+                    </Pressable>
+                    <Pressable onPress={() => {
+                      commentRef.current?.focus()
+                    }}>
+                      <MaterialCommunityIcons name="comment-outline" size={32} color="#c4c4c4" />
+                    </Pressable>
+                  </View>
+                  <View className='w-full h-[1] bg-zinc-900 mt-8'></View>
+                </View> */

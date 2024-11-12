@@ -56,9 +56,7 @@ export default function postPreview() {
   }
 
   const sendPost = async () => {
-    console.log(image)
     postMutation.mutate({ description, image })
-    console.log("post")
   }
   //TODO fix this
   useFocusEffect(
