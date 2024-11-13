@@ -1,4 +1,4 @@
-import { View, Image, Pressable } from 'react-native'
+import { View, Pressable, Image } from 'react-native'
 import CustomText from './customText'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -7,7 +7,8 @@ import React from 'react';
 import { useState } from 'react';
 import { Skeleton } from 'moti/skeleton';
 import SkeletonExpo from 'moti/build/skeleton/expo';
-import ExpoImage from 'expo-image/build/ExpoImage';
+import { Image as ExpoImage } from 'expo-image';
+
 
 export default React.memo(function PostItem(props: any) {
   const { pfpUrl, attachmentUrl, username, description, challengeDesc, datePosted, _id, isX } = props
@@ -15,7 +16,7 @@ export default React.memo(function PostItem(props: any) {
 
   return (
     <Skeleton.Group show={!loaded}>
-      <View className='h-[900]'>
+      <View className=''>
         <Pressable className='px-2' onPress={() => {
           router.navigate(`/(main)/singlePost?pfpUrl=${encodeURIComponent(pfpUrl)}&username=${encodeURIComponent(username)}&description=${encodeURIComponent(description)}&challengeDesc=${encodeURIComponent(challengeDesc)}&attachmentUrl=${encodeURIComponent(attachmentUrl)}&datePosted=${encodeURIComponent(datePosted)}&${encodeURIComponent("_id")}=${encodeURIComponent(_id)}`)
         }}>

@@ -121,7 +121,7 @@ export default function Home() {
           }}
           renderItem={(item) => {
             return (
-              <View style={{ zIndex: 10.5 }}>
+              <View style={{ zIndex: 10 }}>
                 <PostItem
                   _id={item.item._id}
                   pfpUrl={item.item.userPfp}

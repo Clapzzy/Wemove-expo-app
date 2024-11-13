@@ -13,6 +13,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/helper/challanges.ts",
-    "src/app/(main)/search.jsx"
+    "src/app/(main)/search.jsx",
+    "nativewind-env.d.ts"
   ]
 }
