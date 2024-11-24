@@ -1,6 +1,6 @@
-import { Text, Image, View, ImageBackground, Animated, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, FlatList, ScrollView, FlatListComponent } from "react-native";
+import { Text, Image, View, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, FlatList, ScrollView, FlatListComponent } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../../helper/challanges"
 import CustomText from "@/components/customText";
@@ -9,6 +9,9 @@ import { useContext } from "react";
 import { useScrollToTop } from '@react-navigation/native';
 import MainContext from "@/helper/mainScreensContext";
 import PostItem from "@/components/postItem";
+import Animated, { AnimatedRef, Animation, useAnimatedRef, useAnimatedScrollHandler, useScrollViewOffset, useSharedValue, withClamp } from "react-native-reanimated";
+import { AnimatedScrollView } from "react-native-reanimated/lib/typescript/component/ScrollView";
+import { useDiffClamp } from "@/helper/diffClamp";
 
 
 export default function Home() {
@@ -31,67 +34,40 @@ export default function Home() {
     }
   })
 
-  const queryChallenges = useQuery({
-    queryKey: ['image'],
-    queryFn: () => getImage()
-  })
 
   const [image, changeImage] = useState(null)
-  const scrollRef = useRef(null)
-
-  const myData = useContext(MainContext)
+  const { sharedAnimatedValue } = useContext(MainContext)
+  const prev = useSharedValue(0);
+  let scrollOffset = 0
+  let diff = 0
   const insets = useSafeAreaInsets()
 
-
-  useScrollToTop(
-    React.useRef({
-      scrollToTop: () => scrollRef.current?.scrollTo({ y: 100 }),
-    })
-  );
+  const scrollAnimatedRef = useAnimatedRef()
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    'worklet';
+    scrollOffset = event.contentOffset.y
+    diff = (scrollOffset - prev.get()) / 100
+    if (sharedAnimatedValue.value + diff < 400 && sharedAnimatedValue.value + diff > 0) {
+      sharedAnimatedValue.value = sharedAnimatedValue.value + diff
+    }
+    //sharedAnimatedValue.value = withClamp({ min: 0, max: 300 }, sharedAnimatedValue.value + diff)
+    prev.value = scrollOffset
+    //console.log(useDiffClamp(scrollOffset, prev, sharedAnimatedValue, 0, 300))
+  })
 
   const viewabilityConfig = useRef({
     viewAreaCoveragePercentThreshold: 60,
     waitForInteraction: false,
   })
 
-  const getImage = async () => {
-    const pic = await AsyncStorage.getItem("tempPic")
-    changeImage(pic)
-    return pic
-  }
-
-  if (queryChallenges.isLoading) {
-    return (
-      <View className="items-center bg-[#262626] flex-1 color-white">
-        <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
-          <SafeAreaView>
-            <CustomText text="Loading ..." type="Bold" className=" text-30 text-gray-500" />
-          </SafeAreaView>
-        </ImageBackground >
-      </View >
-
-    )
-  }
-
-  if (queryChallenges.isError) {
-    return (
-      <View className="items-center bg-[#262626] flex-1 color-white">
-        <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
-          <SafeAreaView>
-            <CustomText text={queryChallenges.error.message} type="Bold" className=" text-30 text-gray-500" />
-          </SafeAreaView>
-        </ImageBackground >
-      </View >
-
-    )
-  }
 
   return (
     <View className="items-center bg-[#060605] flex-[1] color-white">
       <View className=" flex-[1] w-full  flex-col">
         <Animated.FlatList
-          ref={scrollRef}
+          ref={scrollAnimatedRef}
           className="w-full"
+          onScroll={scrollHandler}
           style={{
             zIndex: 1
           }}
@@ -176,4 +152,41 @@ export default function Home() {
         }}
         className='w-full bg-[#0F0F0F]'
       >
+
+  const getImage = async () => {
+    const pic = await AsyncStorage.getItem("tempPic")
+    changeImage(pic)
+    return pic
+  }
+
+  const queryChallenges = useQuery({
+    queryKey: ['image'],
+    queryFn: () => getImage()
+  })
+
+  if (queryChallenges.isLoading) {
+    return (
+      <View className="items-center bg-[#262626] flex-1 color-white">
+        <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
+          <SafeAreaView>
+            <CustomText text="Loading ..." type="Bold" className=" text-30 text-gray-500" />
+          </SafeAreaView>
+        </ImageBackground >
+      </View >
+
+    )
+  }
+
+  if (queryChallenges.isError) {
+    return (
+      <View className="items-center bg-[#262626] flex-1 color-white">
+        <ImageBackground className="w-full h-full" source={require('assets/waves.png')}>
+          <SafeAreaView>
+            <CustomText text={queryChallenges.error.message} type="Bold" className=" text-30 text-gray-500" />
+          </SafeAreaView>
+        </ImageBackground >
+      </View >
+
+    )
+  }
  * */

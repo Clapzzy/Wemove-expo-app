@@ -1,13 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { View, Image, ImageBackground } from "react-native";
+import { View, Image, ImageBackground, LogBox } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { setTSpan } from "react-native-svg/lib/typescript/lib/extract/extractText";
 
 export default function Page() {
   const checkWhereToGo = async () => {
     router.push('/(main)/challenges')
+    LogBox.ignoreLogs()
     return
 
     await AsyncStorage.setItem("username", "hello")

@@ -11,7 +11,6 @@ import { router, useFocusEffect } from 'expo-router';
 
 export default function postPreview() {
   const insets = useSafeAreaInsets()
-  const contextData = useContext(MainContext)
   const queryClient = useQueryClient()
   const [image, setImage] = useState(null)
   const [isDisabled, setIsDisabled] = useState(false)

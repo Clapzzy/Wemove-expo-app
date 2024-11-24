@@ -10,18 +10,18 @@ import SkeletonExpo from 'moti/build/skeleton/expo';
 import { Image as ExpoImage } from 'expo-image';
 
 
-export default React.memo(function PostItem(props: any) {
-  const { pfpUrl, attachmentUrl, username, description, challengeDesc, datePosted, _id, isX } = props
+export default React.memo(function PostItem({ pfpUrl, attachmentUrl, username, description, challengeDesc, datePosted, _id, isX }: any) {
   const [loaded, setLoaded] = useState(false)
 
   return (
     <Skeleton.Group show={!loaded}>
-      <View className=''>
+      <View className='bg-[#060605]'           >
         <Pressable className='px-2' onPress={() => {
           router.navigate(`/(main)/singlePost?pfpUrl=${encodeURIComponent(pfpUrl)}&username=${encodeURIComponent(username)}&description=${encodeURIComponent(description)}&challengeDesc=${encodeURIComponent(challengeDesc)}&attachmentUrl=${encodeURIComponent(attachmentUrl)}&datePosted=${encodeURIComponent(datePosted)}&${encodeURIComponent("_id")}=${encodeURIComponent(_id)}`)
         }}>
-          <Pressable className="flex-row mt-7 " onPress={async () => {
-            router.navigate(`/(main)/profile/${encodeURIComponent(username)}`)
+          {/*nz dali da e v centura ili ne*/}
+          <Pressable className="flex-row mt-7 items-center" onPress={async () => {
+            router.navigate(`/(main)/profile/${encodeURIComponent(username)}?pfpUrl=${encodeURIComponent(pfpUrl)}`)
           }}>
             <SkeletonExpo width={48} height={48} colorMode='dark' backgroundColor="#131310" radius={"round"}>
               <Image
@@ -82,7 +82,7 @@ export default React.memo(function PostItem(props: any) {
           </View>
           <View className='mt-3'>
             <SkeletonExpo width={"100%"} height={265} colorMode='dark' radius={12}>
-              <ExpoImage
+              <Image
                 source={{ uri: attachmentUrl }}
                 className=' w-full h-[265] rounded-xl'
                 style={{ width: "100%", height: 265, borderRadius: 12 }}
@@ -109,4 +109,4 @@ export default React.memo(function PostItem(props: any) {
       </View>
     </Skeleton.Group>
   )
-}, (prevProps: any, nextProps: any) => prevProps?._id === nextProps?._id)
+}, (prevProps: any, nextProps: any) => prevProps?._id === nextProps?._id && prevProps.username === nextProps.username)

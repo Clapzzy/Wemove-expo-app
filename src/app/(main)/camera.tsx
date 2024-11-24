@@ -86,7 +86,7 @@ export default function App() {
             </Pressable>
           </View>
         </View>
-        <TouchableOpacity className=' absolute  top-16 left-4 w-[42] h-[42] bg-[#13131080] justify-center rounded-full' onPress={() => { router.back() }}>
+        <TouchableOpacity className=' absolute  top-16 left-4 w-[42] h-[42] bg-[#13131080] justify-center rounded-full' onPress={() => { router.push("/(main)/challenges") }}>
           <Ionicons className='mr-3' name="caret-back-outline" size={38} color="#E4FF66" />
         </TouchableOpacity>
         <View className='flex-[1] flex-row justify-center bg-transparent m-4'>

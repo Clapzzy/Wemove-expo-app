@@ -151,7 +151,6 @@ export default function postPreview({ route }) {
     switch (num) {
       case 1:
         return "1st"
-        break
       case 2:
         return "2nd"
       case 3:
@@ -354,7 +353,6 @@ export default function postPreview({ route }) {
           return (
             <View
               className="w-full bg-[#060604]"
-              onLayout={() => setIsHeaderMounted(true)}
             >
               <View className='flex-[1] px-4'>
                 <Animated.View
@@ -388,7 +386,7 @@ export default function postPreview({ route }) {
                       source={
                         queryProfile?.data?.pictureUrl == ""
                           ? require('../../../../assets/pfp2.png')
-                          : { uri: queryProfile.data?.pictureUrl }
+                          : { uri: urlParams.pfpUrl }
                       }
                       className=" rounded-full w-full h-full"
                     ></Image>
@@ -463,7 +461,6 @@ export default function postPreview({ route }) {
           marginTop: HEADER_HEIGHT_NARROWED,
           paddingTop: HEADER_HEIGHT_EXPANDED,
         }}
-        key={isHeaderMounted ? 'mounted' : 'initial'}
         scrollEventThrottle={16}
         data={data?.pages.flat()}
         keyExtractor={item => {
