@@ -23,7 +23,7 @@ export default function TabLayout() {
 
 
   return (
-    <AnimatedTabs
+    <Tabs
       backBehavior="history"
       screenOptions={{
         tabBarActiveTintColor: "#E5E5E5",
@@ -53,6 +53,9 @@ export default function TabLayout() {
             width: "100%",
             justifyContent: 'center',
             alignItems: 'center',
+          },
+          tabBarStyle: {
+            display: 'none'
           },
           tabBarShowLabel: false,
           headerShown: false,
@@ -165,6 +168,6 @@ export default function TabLayout() {
           href: null,
         }}
       />
-    </AnimatedTabs >
+    </Tabs >
   );
 }

@@ -1,17 +1,48 @@
-import { Text, Image, View, ImageBackground, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, Touchable, FlatList, ScrollView, FlatListComponent } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { View, FlatList } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import React, { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../../helper/challanges"
-import CustomText from "@/components/customText";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
-import { useScrollToTop } from '@react-navigation/native';
+import { Foundation, Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import MainContext from "@/helper/mainScreensContext";
 import PostItem from "@/components/postItem";
 import Animated, { AnimatedRef, Animation, useAnimatedRef, useAnimatedScrollHandler, useScrollViewOffset, useSharedValue, withClamp } from "react-native-reanimated";
-import { AnimatedScrollView } from "react-native-reanimated/lib/typescript/component/ScrollView";
-import { useDiffClamp } from "@/helper/diffClamp";
+import { Link } from "expo-router";
+
+const IconWrapper = ({ children }) => (
+  <View className='justify-center items-center'>
+    {children}
+  </View>
+)
+
+const AnimatedTabBar = () => {
+  const insets = useSafeAreaInsets()
+
+  return (
+    <Animated.View
+      className=' absolute h-[70] bg-[#0F0F0F] flex-row items-center justify-around right-4 left-4 bottom-0 z-10'
+      style={{
+        elevation: 0,
+        marginBottom: insets.bottom - 10,
+        borderRadius: 20
+      }}
+    >
+      <Link className=" justify-center items-center" href={"/(main)/home"}>
+        <Foundation name='home' size={34} color='#E5E5E5' />
+      </Link>
+      <Link className=" justify-center items-center" href={"(main)/challenges"} >
+        <Feather name="target" size={32} color='#8f8f8f' />
+      </Link>
+      <Link className=" justify-center items-center" href={"(main)/search"} >
+        <Ionicons name="search" size={34} color='#8f8f8f' />
+      </Link>
+      <Link className=" justify-center items-center" href={"(main)/inbox"} >
+        <Feather name="inbox" size={34} color='#8f8f8f' />
+      </Link>
+    </Animated.View>
+  )
+}
 
 
 export default function Home() {
@@ -117,6 +148,7 @@ export default function Home() {
           )}
         />
       </View>
+      <AnimatedTabBar />
     </View >
   );
 }
